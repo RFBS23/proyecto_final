@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="assets/login/fonts/material-icon/css/material-design-iconic-font.min.css">
     <!-- Main css -->
     <link rel="stylesheet" href="assets/login/css/style.css">
+    <link rel="stylesheet" href="assets/css/scroll.css" />
 </head>
 <body style="user-select: none;">
     <div class="main">

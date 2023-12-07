@@ -154,6 +154,7 @@ CREATE TABLE detalles
 INSERT INTO detalles (idmodulo, idcurso, iddocente, diainicio,fechafin, horainicio, horafin) VALUES
 		(1, 1, 1, '2023-10-11','2023-12-24', '04:00', '06:00'),
 		(1, 2, 1, '2023-10-11','2023-12-24', '02:00', '03:30');
+        
 SELECT * FROM detalles;
 
 -- TABLA ALUMNOS
