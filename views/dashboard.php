@@ -107,18 +107,17 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                         <div class="row align-items-md-stretch">
                             <div class="col-md-6">
                                 <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                                    <canvas id="myChart"></canvas>
+                                    <canvas id="asistenciaChart"></canvas>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                                <h2>Add borders</h2>
-                                <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-                                <button class="btn btn-outline-secondary" type="button">Example button</button>
+                                    <canvas id="resultadosalumnos"></canvas>
                                 </div>
                             </div>
                         </div>
 
+                        <!--
                         <div class="py-4"></div>
 
                         <div class="card">
@@ -150,6 +149,7 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                 </table>
                             </div>
                         </div>
+-->
 
                         <!-- cargamos el contenido dinamico -->
                         <div class="container-fluid" id="contenido-dinamico">
@@ -175,29 +175,70 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
 </body>
 </html>
 
 <script>
-  const ctx = document.getElementById('myChart');
+    var datos = {
+        labels: ["Asistieron", "Faltaron", "Ausentes", "Justificados"],
+        datasets: [{
+            data: [1, 0, 0, 1], // Porcentajes de asistencia
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(54, 162, 235, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+    // Configuración del gráfico
+    var opciones = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Porcentaje de Asistencia'
+            }
         }
-      }
-    }
-  });
+    };
+    // Obtén el contexto del canvas
+    var ctx = document.getElementById('asistenciaChart').getContext('2d');
+
+    // Crea el gráfico de tipo 'doughnut'
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: datos,
+        options: opciones
+    });
+
+    /* grafico de calificaciones */
+    var datosJSON = <?php echo !empty($datos_json) ? $datos_json : 'null'; ?>;
+
+    // Verificar si hay datos y obtener las propiedades adecuadas
+    var porcentajeAprobados = datosJSON ? datosJSON.porcentaje_aprobados : 0;
+    var porcentajeDesaprobados = datosJSON ? datosJSON.porcentaje_desaprobados : 0;
+
+    var ctx = document.getElementById('resultadosalumnos').getContext('2d');
+    var miGrafico = new Chart(ctx, {
+        type: 'bar', // Puedes cambiar el tipo de gráfico según tus necesidades
+        data: {
+            labels: ['Aprobados', 'Desaprobados'],
+            datasets: [{
+                data: [porcentajeAprobados, porcentajeDesaprobados],
+                backgroundColor: ['green', 'red']
+            }]
+        }
+    });
 </script>

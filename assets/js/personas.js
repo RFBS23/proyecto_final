@@ -39,7 +39,6 @@ $(document).ready(function (){
             }
         });
     }
-
     function mostrarTipoDoc(){
         $.ajax({
             url: '../controllers/personas.controllers.php',
@@ -51,20 +50,36 @@ $(document).ready(function (){
         });
     }
 
-    function registrarPersonas(){
+    function registrarPersonas() {
+        // Obtener los valores de los campos
+        let nombres = $("#nombres").val();
+        let apellidos = $("#apellidos").val();
+        let genero = $("#genero").val();
+        let celular = $("#celular").val();
+        let fechanacimiento = $("#fechanacimiento").val();
+        let tipodocumento = $("#tipodocumento").val();
+        let numerodocumento = $("#numerodocumento").val();
+
+        // Verificar si los campos obligatorios están completos
+        if (!nombres || !apellidos || !genero || !celular || !fechanacimiento || !tipodocumento || !numerodocumento) {
+            Swal.fire('Por favor, complete todos los campos obligatorios', '', 'error');
+            return; // Detener la ejecución si hay campos incompletos
+        }
+
+        // Crear el objeto con los datos a enviar
         let datosEnviar = {
-            'operacion' : 'registrarPersonas',
-            'nombres' : $("#nombres").val(),
-            'apellidos' : $("#apellidos").val(),
-            'genero' : $("#genero").val(),
-            'celular' : $("#celular").val(),
-            'direccion' : $("#direccion").val(),
-            'fechanacimiento' : $("#fechanacimiento").val(),
-            'tipodocumento' : $("#tipodocumento").val(),
-            'numerodocumento' : $("#numerodocumento").val()
+            'operacion': 'registrarPersonas',
+            'nombres': nombres,
+            'apellidos': apellidos,
+            'genero': genero,
+            'celular': celular,
+            'direccion': $("#direccion").val(), // Agregado para obtener el valor de la dirección
+            'fechanacimiento': fechanacimiento,
+            'tipodocumento': tipodocumento,
+            'numerodocumento': numerodocumento
         };
 
-        if (!datosNuevos){
+        if (!datosNuevos) {
             datosEnviar["operacion"] = "actualizarPersonas";
             datosEnviar["idpersona"] = idpersona;
         }
@@ -73,36 +88,45 @@ $(document).ready(function (){
             title: '¿Revise bien los campos antes de registrar a la persona?',
             showDenyButton: true,
             confirmButtonText: 'Guardar',
-            denyButtonText: `Cancelar`,
+            denyButtonText: 'Cancelar',
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
+            // Resto del código para manejar la confirmación
+            $.ajax({
+                    url: '../controllers/personas.controllers.php',
+                    type: 'GET',
+                    data: datosEnviar,
+                    success: function (result) {
+                        $("#formulario-persona")[0].reset();
+                        mostrarPersonas();
+                        Swal.fire('Se Registro Correctamente', '', 'success');
+                    }
+                });
+        });
+/*
+        // Mostrar la confirmación antes de enviar los datos
+        Swal.fire({
+            title: '¿Revise bien los campos antes de registrar a la persona?',
+            showDenyButton: true,
+            confirmButtonText: 'Guardar',
+            denyButtonText: 'Cancelar',
+        }).then((result) => {
             if (result.isConfirmed) {
+                // Enviar los datos solo si se confirma
                 $.ajax({
                     url: '../controllers/personas.controllers.php',
                     type: 'GET',
                     data: datosEnviar,
-                    success: function (result){
+                    success: function (result) {
                         $("#formulario-persona")[0].reset();
                         mostrarPersonas();
+                        Swal.fire('Se Registro Correctamente', '', 'success');
                     }
                 });
-                Swal.fire('Se Registro Correctamente', '', 'success')
             } else if (result.isDenied) {
-                Swal.fire('Revise su registro', '', 'error')
+                // Si se cancela, no hagas nada o muestra un mensaje
+                Swal.fire('Revise su registro', '', 'error');
             }
-        });
-        /*
-        if (confirm("¿Revise bien los campos antes de registrar a la persona?")){
-            $.ajax({
-                url: '../controllers/personas.controllers.php',
-                type: 'GET',
-                data: datosEnviar,
-                success: function (result){
-                    $("#formulario-persona")[0].reset();
-                    mostrarPersonas();
-                }
-            });
-        }*/
+        });*/
     }
 
     function buscarPersonas(){
@@ -157,8 +181,6 @@ $(document).ready(function (){
         idpersona = $(this).data("ideditar");
         mostrarPersonas(idpersona);
     });
-
-
 
     $("#registrar").click(registrarPersonas);
     mostrarGenero();

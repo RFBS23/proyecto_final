@@ -28,16 +28,19 @@ if (isset($_POST['operacion'])){
                 $resultado["nombreusuario"] = $datoObtenido["nombreusuario"];
                 $resultado["correo"] = $datoObtenido["correo"];
                 $resultado["nivelacceso"] = $datoObtenido["nivelacceso"];
+
+
             } else {
                 //clave incorrecta
                 $resultado["mensaje"] = "Contraseña incorrecta";
             }
         } else {
             //usuario no encontrado
-            $resultado["mensaje"] = "no se encuentra al usuario";
+            $resultado["mensaje"] = "No se encuentra al usuario";
         }
         $_SESSION["login"] = $resultado;
 
+        
         echo json_encode($resultado);
     }
 }

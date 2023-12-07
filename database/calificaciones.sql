@@ -1,7 +1,6 @@
 USE sistemaolympus;
 
 DELIMITER $$
-
 CREATE PROCEDURE RegistrarPractica1(
     IN _idresultado INT,
     IN _practica1 DECIMAL(4, 2)

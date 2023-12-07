@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     // Obtener referencias a elementos HTML
     const periodoSelector = document.getElementById('periodoSelector');
@@ -5,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tablasAsistencia = document.querySelector('#tablasAsistencia');
     const cuerpotabla = tablasAsistencia.querySelector('tbody');
     const tablaResultado = document.querySelector('#tablaResultado');
-    const cuerpotabla1 = tablaResultado.querySelector('tbody');    
+    const cuerpotabla1 = tablaResultado.querySelector('tbody');
     const tablaPractica = document.querySelector('#tablaPractica');
     const cuerpotablaPractica = tablaPractica.querySelector('tbody');
 
@@ -15,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
         parametros.append("operacion", "listarModulos");
         parametros.append("nombremodulo", periodoSeleccionado);
         fetch(`../controllers/modulos.controllers.php`, {
-            
             method: 'POST',
             body: parametros
         })
@@ -23,31 +23,27 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 // Limpiar el contenedor de cursos
                 cursosContainer.innerHTML = '';
-                
+
                 // Mostrar los cursos en tarjetas
                 data.forEach(cursos => {
                     const card = document.createElement('div');
-                    card.classList.add('card', 'h-100');
+                    card.classList.add('div', 'h-100');
                     card.innerHTML = `
-                        <div class="">
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="../assets/img/administrador.png" class="img-thumbnail" alt="...">
-                                    <!--<img class="card-img card-img-left" src="../assets/img/administrador.png" alt="imagen"/>-->
-                                    <div class="card-body" id="cursosContainer">
-                                        <h5 class="card-title">${cursos.Cursos}</h5>
-                                        <p class="card-text">
-                                            Profesor: ${cursos.Docente}
-                                        </p>
-                                    </div>
-                                </div>
+                        <div class="card border-success" style="width: 23rem; cursor: pointer;">
+                            <div class="text-center py-3">
+                                <img src="../assets/img/administrador.png" class="img-fluid" alt="..." style="width: 100px; height: 100px;">
                             </div>
-                        </div>                            
+                            <div class="card-body">
+                                <h5 class="card-title">${cursos.Cursos}</h5>
+                                <p class="card-text">Profesor: ${cursos.Docente}</p>
+                                <a href="#" class="btn btn-outline-success">Abrir</a>
+                            </div>
+                        </div>
                     `;
                     card.addEventListener('click', function () {
                         // Abre el modal
                         $('#modal-buscador').modal('show');
-                    
+
                         // Adjunta un evento para ejecutar la función cuando el modal se muestra
                         $('#modal-buscador').on('shown.bs.modal', function onModalShown() {
                             const nombreCurso = cursos.Cursos;
@@ -59,16 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     });
                     cursosContainer.appendChild(card);
-                });
-     
-                cuerpotabla.addEventListener('change', function (event) {
-                    const radio = event.target;
-                    if (radio.classList.contains('btn-check')) {
-                        const idasistencia = radio.id.split('-')[1];
-                        const estadoasistencia = radio.checked ? radio.value : '';                  
-                        actualizarEstadoAsistencia(idasistencia, estadoasistencia);
-                        updateAttendanceColor()
-                    }
                 });
             })
     }
@@ -102,6 +88,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    function getInitialAvatar(apellidos, nombres) {
+        //const initials = lastName.charAt(0).toUpperCase();
+        const initials = `${apellidos.charAt(0).toUpperCase()}${nombres.charAt(0).toUpperCase()}`;
+        // Puedes utilizar un servicio de letras iniciales o almacenar tus propias imágenes con iniciales.
+        // Aquí se utiliza "https://dummyimage.com" con un fondo gris y texto blanco para la inicial.
+        return `https://dummyimage.com/40x40/999999/ffffff&text=${initials}`;
+    }
+
     function cargarEstudiantesPorCurso(nombreCurso) {
         const parametros = new URLSearchParams();
         parametros.append("operacion", "listarAlumnosPorCurso");
@@ -123,10 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     estadoSelects[Alumno.idasistencia] = Alumno.Estado;
                     const fila = `
                         <tr>
-                            <td>${numeroFila}</td>
-                            <td>${Alumno.Apellidos}</td>
-                            <td>${Alumno.Nombres}</td>
-                            <td class="attendance-status" data-idasistencia="${Alumno.idasistencia}">${Alumno.Estado}</td>
+                            <td>
+                                <img src="${getInitialAvatar(Alumno.Apellidos, Alumno.Nombres)}" alt="Avatar" style="border-radius: 50%; width: 40px; height: 40px;">
+                            </td>
+                            <td style="width: 20%;">${Alumno.Apellidos}</td>
+                            <td style="width: 20%;">${Alumno.Nombres}</td>
+                            <td class="attendance-status" data-idasistencia="${Alumno.idasistencia}" style="width: 15%;">${Alumno.Estado}</td>
                             <td>
                                 <input type="radio" class="btn-check" name="attendance-options-${Alumno.idasistencia}" id="presente-${Alumno.idasistencia}" value="PRESENTE" ${Alumno.Estado === 'PRESENTE' ? 'checked' : ''}>
                                 <label class="btn btn-outline-success" for="presente-${Alumno.idasistencia}">PRESENTE</label>
@@ -139,40 +135,43 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                                 <input type="radio" class="btn-check" name="attendance-options-${Alumno.idasistencia}" id="justificado-${Alumno.idasistencia}" value="JUSTIFICADO" ${Alumno.Estado === 'JUSTIFICADO' ? 'checked' : ''}>
                                 <label class="btn btn-outline-info" for="justificado-${Alumno.idasistencia}">JUSTIFICADO</label>
-                             </td>
+                            </td>
                         </tr>
                     `;
                     cuerpotabla.innerHTML += fila;
                     numeroFila++;
                     updateAttendanceColor();
-                
                 });
-           
 
-            // Luego de cargar las filas, asigna los valores de los select
-            Object.keys(estadoSelects).forEach(idasistencia => {
-                const estado = estadoSelects[idasistencia];
-                const radioElement = document.getElementById(`${estado.toLowerCase()}-${idasistencia}`);
-                if (radioElement) {
-                    radioElement.checked = true;
+                // Luego de cargar las filas, asigna los valores de los select
+                Object.keys(estadoSelects).forEach(idasistencia => {
+                    const estado = estadoSelects[idasistencia];
+                    const radioElement = document.getElementById(`${estado.toLowerCase()}-${idasistencia}`);
+                    if (radioElement) {
+                        radioElement.checked = true;
 
-                    actualizarEstadoEnDOM(idasistencia, estado);
-                    resetAsistenciaAtMidnight();
-                }
+                        actualizarEstadoEnDOM(idasistencia, estado);
+                        resetAsistenciaAtMidnight();
+                    }
+                });
+
+                cuerpotabla.addEventListener('change', function (event) {
+                    const radio = event.target;
+                    if (radio.classList.contains('btn-check')) {
+                        const idasistencia = radio.id.split('-')[1];
+                        const estadoasistencia = radio.checked ? radio.value : '';
+                        actualizarEstadoAsistencia(idasistencia, estadoasistencia);
+                        updateAttendanceColor();
+                    }
+                });
             });
-
-
-            }) 
     }
 
-
-   
-    
     function cargarEstudiantesPractica(nombreCurso) {
         const parametros = new URLSearchParams();
         parametros.append("operacion", "AlumnosPractica");
         parametros.append("nombrecurso", nombreCurso);
-    
+
         fetch(`../controllers/calificacion.controllers.php`, {
             method: 'POST',
             body: parametros
@@ -180,14 +179,13 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             cuerpotablaPractica.innerHTML = '';
-    
             let numeroFila = 1;
-    
             data.forEach(Alumno => {
-                
                 const fila = `
                     <tr>
-                        <td>${numeroFila}</td>
+                        <td>
+                            <img src="${getInitialAvatar(Alumno.Apellidos, Alumno.Nombres)}" alt="Avatar" style="border-radius: 50%; width: 40px; height: 40px;">
+                        </td>
                         <td>${Alumno.Apellidos}</td>
                         <td>${Alumno.Nombres}</td>
                         <td> 
@@ -200,37 +198,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 cuerpotablaPractica.innerHTML += fila;
                 numeroFila++;
-                
             });
 
-
-            
-    
             $(document).ready(function () {
-
-                $(document).off('input', '.nota-practica');
-
+                //$(document).off('input', '.nota-practica');
                 $(document).on('input', '.nota-practica', function () {
                     const idresultado = $(this).data('idresultado');
                     const notaPractica = $(this).val();
                     const practicaNumeroModal = $('#modal-practica').data('practicaNumero');
-    
-
-                
-    
                     registrarPractica(idresultado, practicaNumeroModal, notaPractica);
                     $(this).data('registrado', true);
-                    mostrarMensaje("listo");
+                    mostrarMensaje("LA NOTA SE AGREGO CORRECTAMENTE");
                 });
-    
+
                 $('.practica-card').click(function () {
                     const practicaNumero = $(this).data('practica');
                     const modalPractica = $('#modal-practica');
                     modalPractica.data('practicaNumero', practicaNumero);
                     modalPractica.find('.modal-title').text($(`#${this.id} h5`).text());
-
                     limpiarInputsPractica();
-
                     listarPractica(1);
                     listarPractica(2);
                     listarPractica(3);
@@ -244,26 +230,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     listarPractica(11);
                     listarPractica(12);
                     listarPractica(13);
-
-
                     modalPractica.modal('show');
                 });
-    
+
                 $('.btn-guardar-practica').on('click', function () {
                     const idresultado = $(this).data('idresultado');
                     const practicaNumeroModal = $('#modal-practica').data('practicaNumero');
                     const notaPractica = modalPractica.find(`.nota-practica[data-idresultado="${idresultado}"]`).val();
-    
-                   
-    
                     registrarPractica(idresultado, practicaNumeroModal, notaPractica);
                 });
             });
-    
+
             function mostrarMensaje(mensaje) {
-         
                 $('#mensajeRegistro').text(mensaje);
-    
                 setTimeout(function() {
                     $('#mensajeRegistro').text('');
                 }, 3000);
@@ -277,9 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
-    
-    
 
     function registrarPractica(idresultado, numeroPractica, nota) {
         const parametros = new URLSearchParams();
@@ -334,15 +310,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error(`Error al obtener las calificaciones de la práctica ${practicaNumero}:`, error));
         }
     }
-    
-    
-    
 
     function cargarEstudiantesResultado(nombreCurso) {
         const parametros = new URLSearchParams();
         parametros.append("operacion", "AlumnosResultado");
         parametros.append("nombrecurso", nombreCurso);
-    
+
         fetch(`../controllers/calificacion.controllers.php`, {
             method: 'POST',
             body: parametros
@@ -350,108 +323,101 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             cuerpotabla1.innerHTML = '';
-
             let numeroFila = 1;
-
-
-
             data.forEach(Alumno => {
                 const modalId = `modal-${Alumno.idresultado}`;
                 const fila = `
                         <tr>
-                            <td>${numeroFila}</td>
+                            <td>
+                                <img src="${getInitialAvatar(Alumno.Apellidos, Alumno.Nombres)}" alt="Avatar" style="border-radius: 50%; width: 40px; height: 40px;">
+                            </td>
                             <td>${Alumno.Apellidos}</td>
                             <td>${Alumno.Nombres}</td>
                             <td id="calificacion-${Alumno.idresultado}">${Alumno.Calificacion}</td>
 
                             <td> 
-                            <button type="button" class="btn btn-primary btn-modal-calificaciones" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calificaciones</button>
-                            <div id="${modalId}" class="modal fade" role="dialog" style="overflow-y: scroll;">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Calificaciones</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn btn-primary btn-modal-calificaciones" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calificaciones</button>
+                                <div id="${modalId}" class="modal fade" role="dialog" style="overflow-y: scroll;">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Calificaciones</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <form class="row g-4 needs-validation" novalidate>
+                                                <label for="zipCode" class="form-label">NOTAS DE DE PRACTICAS</label>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica1" value="" readonly>
+                                                    <label for="floatingInput">Practica 1<label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica2"  value="" readonly>
+                                                    <label for="floatingInput">Practica 2</label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica3"  value="" readonly>
+                                                    <label for="floatingInput">Practica 3</label>
+                                                </div>
+                                                <div class="form-floating col-md-3 ">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica4"  value="" readonly>
+                                                    <label for="floatingInput">Practica 4</label>
+                                                </div>
+            
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control " placeholder="nota" id="Practica5" value="" readonly>
+                                                    <label for="floatingInput">Practica 5</label>
+                                                </div>
+            
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica6" value="" readonly>
+                                                    <label for="floatingInput">Practica 6</label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica7" value="" readonly>
+                                                    <label for="floatingInput">Practica 7</label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica8"  value="" readonly>
+                                                    <label for="floatingInput">Practica 8</label>
+                                                </div>
+                                                <div class="form-floating col-md-3 ">
+                                                    <input type="number" class="form-control " placeholder="nota" id="Practica9"  value="" readonly>
+                                                    <label for="floatingInput">Practica 9</label>
+                                                </div>
+            
+                                                <div class="form-floating col-md-3 ">
+                                                    <input type="number" class="form-control " placeholder="nota" id="Practica10" value="" readonly>
+                                                    <label for="floatingInput">Practica 10</label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica11"   value="" readonly>
+                                                    <label for="floatingInput">Practica 11</label>
+                                                </div>
+                                                <div class="form-floating col-md-3">
+                                                    <input type="number" class="form-control" placeholder="nota" id="Practica12"  value="" readonly>
+                                                    <label for="floatingInput">Practica 12</label>
+                                                </div>
+            
+                                                <label for="zipCode" class="form-label">PROMEDIO FINAL</label>
+                                                <div class="form-floating col-md-3 ">
+                                                    <input type="number" class="form-control" placeholder="nota" id="examenfinal"  value=""readonly>
+                                                    <label for="floatingInput">Examen Final</label>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="modal-body">
-                                        <form class="row g-4 needs-validation" novalidate>
-                                        <label for="zipCode" class="form-label">Sesiones</label>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica1" value=""  readonly>
-                                            <label for="floatingInput">Practica 1<label>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-primary btn-calcular-calificacion" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calcular Calificación</button>
+                                            </div>
                                         </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica2"  value=""  readonly>
-                                            <label for="floatingInput">Practica 2</label>
-                                        </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica3"  value=""  readonly>
-                                            <label for="floatingInput">Practica 3</label>
-                                        </div>
-                                        <div class="form-floating col-md-3 ">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica4"  value=""  readonly>
-                                            <label for="floatingInput">Practica 4</label>
-                                        </div>
-    
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control " placeholder="nota" id="Practica5" value=""  readonly>
-                                            <label for="floatingInput">Practica 5</label>
-                                        </div>
-    
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica6" value=""  readonly>
-                                            <label for="floatingInput">Practica 6</label>
-                                        </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica7" value=""  readonly>
-                                            <label for="floatingInput">Practica 7</label>
-                                        </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica8"  value=""  readonly>
-                                            <label for="floatingInput">Practica 8</label>
-                                        </div>
-                                        <div class="form-floating col-md-3 ">
-                                            <input type="number" class="form-control " placeholder="nota" id="Practica9"  value="" readonly>
-                                            <label for="floatingInput">Practica 9</label>
-                                        </div>
-    
-                                        <div class="form-floating col-md-3 ">
-                                            <input type="number" class="form-control " placeholder="nota" id="Practica10" value="" readonly>
-                                            <label for="floatingInput">Practica 10</label>
-                                        </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica11"   value="" readonly>
-                                            <label for="floatingInput">Practica 11</label>
-                                        </div>
-                                        <div class="form-floating col-md-3">
-                                            <input type="number" class="form-control" placeholder="nota" id="Practica12"  value="" readonly>
-                                            <label for="floatingInput">Practica 12</label>
-                                        </div>
-    
-                                        <label for="zipCode" class="form-label">EXAMEN</label>
-                                        <div class="form-floating col-md-3 ">
-                                            <input type="number" class="form-control" placeholder="nota" id="examenfinal"  value="" readonly>
-                                            <label for="floatingInput">Examen Final</label>
-                                        </div>
-                                    </form>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-calcular-calificacion" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calcular Calificación</button>
-                                        </div>
-                                    </div>
-                                        
                                 </div>
-                            </div>
-                            
                             </td>
                         </tr>
                     `;
                 cuerpotabla1.innerHTML += fila;
                 numeroFila++;
-
-                
             });
-            
 
             $(document).on('click', '.btn-modal-calificaciones', function () {
                 const modalId = $(this).data('modal-id');
@@ -462,26 +428,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 ListarPractica(idresultado, modalId);
             });
 
-
-
             $(document).off('click', '.btn-calcular-calificacion').on('click', '.btn-calcular-calificacion', function () {
                 const idresultado = $(this).data('idresultado');
                 CalcularCalificacion(idresultado);
-            
                 const modalId = $(this).data('modal-id');
-            
                 $(`#${modalId}`).on('hidden.bs.modal', function () {
                     // Esta función se ejecutará cuando el modal se haya cerrado completamente
                     actualizarTablaCalificacionesFinales(nombreCurso);
                 });
-            
                 $(`#${modalId}`).modal('hide');
             });
-            
-            
-
         })
-
     }
 
 
@@ -674,8 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const idasistencia = radio.id.split('-')[1];
                 actualizarEstadoAsistencia(idasistencia, '');
             });
-        },  24 * 60 * 60 * 1000); 
-        
+        },  24 * 60 * 60 * 1000);
     }
     
 
@@ -696,5 +652,4 @@ document.addEventListener('DOMContentLoaded', function () {
     resetAsistenciaAtMidnight();
     cargarNombresModulo();
     cargarCursos(periodoSelector.value);
-
 });

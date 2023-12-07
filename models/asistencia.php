@@ -1,15 +1,9 @@
 <?php
-
 require_once 'conexion.php';
-
 class Asistencia extends Conexion {
-
   private $acceso;
-
   public function __CONSTRUCT(){
-
     $this->acceso = parent::getConexion();
-
   }
   
   public function AlumnosPorCurso($nombreCurso){
@@ -20,7 +14,6 @@ class Asistencia extends Conexion {
     } catch (Exception $e) {
         die($e->getMessage());
     }
-
   }
 
   public function ActualizarEstadoAsistencia($idasistencia, $estadoasistencia) {
@@ -31,7 +24,5 @@ class Asistencia extends Conexion {
     } catch (Exception $e) {
         die($e->getMessage());
     }
-  } 
-
-  
+  }
 }

@@ -36,8 +36,9 @@
 <!-- validaciones de cajas -->
 <script src="../assets/js/validacionCajas.js"></script>
 <script src="../assets/js/totalcards.js"></script>
- <!--AJAX = JavaScript asincrónico-->
- <script src="../script.js"></script>
+<!--AJAX = JavaScript asincrónico-->
+<script src="../script.js"></script>
+<!--<script src="../scriptstudiante.js"></script>-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- Datatable for BS5 -->

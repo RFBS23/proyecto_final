@@ -69,30 +69,14 @@
 
     <div class="col-lg-6 col-md-6 order-1">
         <div class="row">
-            <div class="col-lg-6 col-md-12 col-6 mb-4">
+            <div class="col-lg-6 col-md-12 col-6 mb-4" id="Tperiodos">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="../assets/img/icons/periodos.png" alt="Credit Card" class="rounded"/>
-                            </div>
-                        </div>
-                        <span>Total de Periodos</span>
-                        <h5 class="card-title text-nowrap mb-1 py-1">4,679</h5>
-                    </div>
+                    <!--datos asincronos -->
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-6 mb-4">
+            <div class="col-lg-6 col-md-12 col-6 mb-4" id="Tresultados">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="../assets/img/icons/notas.png" alt="Credit Card" class="rounded"/>
-                            </div>
-                        </div>
-                        <span>Notas Publicadas</span>
-                        <h5 class="card-title text-nowrap mb-1 py-1">4,679</h5>
-                    </div>
+                    <!-- datos asincronos -->
                 </div>
             </div>
         </div>

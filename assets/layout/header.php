@@ -14,10 +14,10 @@
 <!-- Vendors CSS -->
 <link rel="stylesheet" href="../assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 <link rel="stylesheet" href="../assets/admin/vendor/libs/apex-charts/apex-charts.css" />
+<link rel="stylesheet" href="../styles.css" />
 <!-- Helpers -->
 <script src="../assets/admin/vendor/js/helpers.js"></script>
 <script src="../assets/admin/js/config.js"></script>
-
 <!-- Datatable for BS5 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">

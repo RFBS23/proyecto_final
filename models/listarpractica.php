@@ -11,7 +11,6 @@ class ListarP extends Conexion {
     $this->acceso = parent::getConexion();
 
   }
-  
 
   public function listarpractica1(){
     try{

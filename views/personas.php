@@ -117,7 +117,7 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                         <span id="basic-icon-default-fullname2" class="input-group-text">
                                             <i class="bx bx-user"></i>
                                         </span>
-                                            <input type="text" class="form-control" id="nombres" placeholder="Ingresa tu nombre" />
+                                            <input type="text" class="form-control" id="nombres" placeholder="Ingresa tu nombre" required/>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -126,7 +126,7 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                             <span id="basic-icon-default-company2" class="input-group-text">
                                               <i class="bx bx-user"></i>
                                             </span>
-                                            <input type="text" id="apellidos" class="form-control" placeholder="ingresa tus apellidos" />
+                                            <input type="text" id="apellidos" class="form-control" placeholder="ingresa tus apellidos" required/>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -147,19 +147,19 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                     <div class="mb-3">
                                         <label class="form-label" for="direccion">Direccion</label>
                                         <div class="input-group input-group-merge">
-                                    <span id="basic-icon-default-company2" class="input-group-text">
-                                      <i class="bx bx-directions"></i>
-                                    </span>
-                                            <input type="text" id="direccion" class="form-control" placeholder="ingresa tus apellidos" aria-label="ACME Inc." aria-describedby="basic-icon-default-company2"/>
+                                            <span id="basic-icon-default-company2" class="input-group-text">
+                                              <i class="bx bx-directions"></i>
+                                            </span>
+                                            <input type="text" id="direccion" class="form-control" placeholder="ingresa tus apellidos" aria-label="ACME Inc." aria-describedby="basic-icon-default-company2" required/>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="fechanacimiento">Fecha Nacimiento</label>
                                         <div class="input-group input-group-merge">
-                                    <span id="basic-icon-default-company2" class="input-group-text">
-                                      <i class="bx bx-calendar"></i>
-                                    </span>
-                                            <input type="date" id="fechanacimiento" class="form-control" placeholder="ingresa tus apellidos" aria-label="ACME Inc." aria-describedby="basic-icon-default-company2"/>
+                                            <span id="basic-icon-default-company2" class="input-group-text">
+                                              <i class="bx bx-calendar"></i>
+                                            </span>
+                                            <input type="date" id="fechanacimiento" class="form-control" placeholder="ingresa tus apellidos" aria-label="ACME Inc." aria-describedby="basic-icon-default-company2" required/>
                                         </div>
                                     </div>
                                     <div class="row gx-3 gy-2 align-items-center">

@@ -13,11 +13,9 @@ class TotalCard extends Conexion {
             $query = $this->conexion->prepare("CALL spu_estudiantes_cantidad()");
             $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
         }
         catch(Exception $e){
             die($e->getMessage());
-
         }
     }
 
@@ -26,11 +24,31 @@ class TotalCard extends Conexion {
             $query = $this->conexion->prepare("CALL spu_cursos_cantidad()");
             $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
         }
         catch(Exception $e){
             die($e->getMessage());
+        }
+    }
 
+    public function totalperiodos(){
+        try{
+            $query = $this->conexion->prepare("CALL spu_modulos_cantidad()");
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function totalresultados(){
+        try{
+            $query = $this->conexion->prepare("CALL spu_resultado_cantidad()");
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
         }
     }
 }

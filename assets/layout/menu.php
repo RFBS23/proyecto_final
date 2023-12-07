@@ -33,12 +33,11 @@
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class='bx bxs-id-card' ></i>
-                    <div data-i18n="Account Settings"> CEO</div>
+                    <div data-i18n="Account Settings">&nbsp; CEO</div>
                 </a>
-                
                 <ul class="menu-sub">
                     <li class="menu-item">
-                        <a href="asistencialumnos.php" class="menu-link">
+                        <a href="administrador.php" class="menu-link">
                             <div data-i18n="Account">Modulos</div>
                         </a>
                     </li>
@@ -47,14 +46,14 @@
 
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class='bx bxs-id-card' ></i>
-                    <div data-i18n="Account Settings">Registros</div>
+                    <i class='bx bxs-user' ></i>
+                    <div data-i18n="Account Settings">&nbsp; Personas</div>
                 </a>
                 
                 <ul class="menu-sub">
                     <li class="menu-item">
                         <a href="personas.php" class="menu-link">
-                            <div data-i18n="Account">Agregar y ver Personas</div>
+                            <div data-i18n="Account">Agregar Personas</div>
                         </a>
                         <a href="listaPersonas.php" class="menu-link">
                             <div data-i18n="Account">Lista de Personas</div>
@@ -63,8 +62,43 @@
                 </ul>
             </li>
 
-        
-            <!-- soporte -->
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class='bx bxs-graduation' ></i>
+                    <div data-i18n="Account Settings">&nbsp; Alumnos</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="registroAlumnos.php" class="menu-link">
+                            <div data-i18n="Account">Agregar Alumnos</div>
+                        </a>
+                        <a href="listaAlumnos.php" class="menu-link">
+                            <div data-i18n="Account">Lista de Alumnos</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class='bx bxs-chalkboard'></i>
+                    <div data-i18n="Account Settings">&nbsp; Profesores</div>
+                </a>
+
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="registroProfesores.php" class="menu-link">
+                            <div data-i18n="Account">Agregar Profesores</div>
+                        </a>
+                        <a href="listaProfesor.php" class="menu-link">
+                            <div data-i18n="Account">Lista de Profesores</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- soporte-->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">SOPORTE</span></li>
             <li class="menu-item">
                 <a href="https://github.com/RFBS23/proyecto_final/issues/1" target="_blank" class="menu-link">
@@ -75,30 +109,20 @@
         <?php } ?>
         <!-- fin administrador -->
 
-        <!-- profesor -->
+        <!-- estudiantes -->
         <?php if($nivelacceso == 'estudiante') { ?>
             <!-- Layouts -->
             <li class="menu-header small text-uppercase">
-                <span class="menu-header-text">Notas Academicos</span>
+                <span class="menu-header-text">Historial Academico</span>
             </li>
-
             <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bxs-notepad"></i>
-                    <div data-i18n="Account Settings">Notas</div>
+                <a class="menu-sub">
+                    <li class="menu-item">
+                        <a href="historialestudiante.php" class="menu-link">
+                            <div data-i18n="Account">Asistencia y Calificaciones</div>
+                        </a>
+                    </li>
                 </a>
-                <ul class="menu-sub">
-                    <li class="menu-item">
-                        <a href="asistencialumnos.php" class="menu-link">
-                            <div data-i18n="Account">Registro de Notas</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="pages-account-settings-notifications.html" class="menu-link">
-                            <div data-i18n="Notifications">Consulta de Notas</div>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="menu-header small text-uppercase">
@@ -118,7 +142,7 @@
                 </ul>
             </li>
         <?php } ?>
-        <!-- fin profesor -->
+        <!-- fin estudiantes -->
     </ul>
 </aside>
 <!-- / Menu -->
