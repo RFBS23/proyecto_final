@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Después de cargar los periodos, selecciona automáticamente el último periodo
                 if (datos.length > 0) {
-                    periodoSelector.value = datos[datos.length - 1].nombremodulo;
+                    periodoSelector.value = datos[datos.length - 2].nombremodulo; //se muestra la cantidad de cursos que esta en cada periodo
                     cargarCursos(periodoSelector.value); // Carga automáticamente los cursos para el último periodo
                 }
             })

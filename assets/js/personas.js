@@ -1,24 +1,24 @@
 $(document).ready(function (){
     let datosNuevos = true;
-    let idpersona = 0;
+    let idpersona = 0; //Actualizar - eliminar
 
-    function mostrarPersonas(){
+    function mostrarPersonas() {
         $.ajax({
             url: '../controllers/personas.controllers.php',
             type: 'GET',
             data: {'operacion': 'listarPersonas'},
-            success: function (result){
-                var tabla = $("#tabla-persona").DataTable();
-                tabla.destroy();
+            success: function (result) {
+                var tabla = $("#tabla-personas").DataTable(); // Corregir aquí
+                tabla.destroy(); // Destruir DataTable existente
                 $("#tabla-personas tbody").html(result);
                 $("#tabla-personas").DataTable({
                     dom: 'Bfrtip',
                     ordering: false,
                     searching: false,
-                    columnDefs:[
+                    columnDefs: [
                         {
                             responsivePriority: 1,
-                            targets: [8]
+                            targets: [7]
                         }
                     ],
                     language: {
@@ -102,31 +102,6 @@ $(document).ready(function (){
                     }
                 });
         });
-/*
-        // Mostrar la confirmación antes de enviar los datos
-        Swal.fire({
-            title: '¿Revise bien los campos antes de registrar a la persona?',
-            showDenyButton: true,
-            confirmButtonText: 'Guardar',
-            denyButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Enviar los datos solo si se confirma
-                $.ajax({
-                    url: '../controllers/personas.controllers.php',
-                    type: 'GET',
-                    data: datosEnviar,
-                    success: function (result) {
-                        $("#formulario-persona")[0].reset();
-                        mostrarPersonas();
-                        Swal.fire('Se Registro Correctamente', '', 'success');
-                    }
-                });
-            } else if (result.isDenied) {
-                // Si se cancela, no hagas nada o muestra un mensaje
-                Swal.fire('Revise su registro', '', 'error');
-            }
-        });*/
     }
 
     function buscarPersonas(){
@@ -142,11 +117,11 @@ $(document).ready(function (){
                 },
                 success: function (result){
                     if (!result){
-                        $("#formulario-busqueda-persona")[0].reset();
+                        $("#formulario-busqueda-personas")[0].reset();
                     } else {
                         $("#nombres").val(result.nombres);
                         $("#apellidos").val(result.apellidos);
-                        $("#genero").val(result.genero);
+                        //$("#genero").val(result.genero);
                         $("#celular").val(result.celular);
                         $("#direccion").val(result.direccion);
                         $("#fechanacimiento").val(result.fechanacimiento);
@@ -156,21 +131,50 @@ $(document).ready(function (){
         }
     }
 
-    function eliminarPersonas(id){
-        if (confirm("¿Estas Seguro de Eliminar a esta persona?")){
-            $.ajax({
-                url: '../controllers/personas.controllers.php',
-                type: 'GET',
-                data: {
-                    'operacion' : 'eliminarPersonas',
-                    'idpersona' : id
-                },
-                success: function (){
-                    mostrarPersonas();
-                }
-            });
-        }
+    function editarPersonas(id){
+        $("#formulario-busqueda-personas")[0].reset();
+        $.ajax({
+            url: '',
+            type: 'GET',
+            data: {
+                'operacion': 'obtenerDatosPersonas',
+                'idpersona': id
+            },
+            dataType: 'JSON',
+            success: function (result){
+                $("#nombres").val(result.nombres);
+            }
+        });
+        $("#modal-buscador").modal("show");
     }
+
+    function eliminarPersonas(idpersona) {
+        Swal.fire({
+            title: '¿Estás seguro de eliminar a esta persona?',
+            text: "Esta acción no se puede deshacer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controllers/personas.controllers.php',
+                    type: 'GET',
+                    data: {
+                        'operacion': 'eliminarPersonas',
+                        'idpersona': idpersona
+                    },
+                    success: function () {
+                        mostrarPersonas();
+                        Swal.fire('Eliminado', 'La persona ha sido eliminada correctamente.', 'success');
+                    }
+                });
+            }
+        });
+    }
+
 
     $("#tabla-personas tbody").on("click", ".eliminar", function() {
         idpersona = $(this).data("ideliminar");
@@ -179,7 +183,7 @@ $(document).ready(function (){
 
     $("#tabla-personas tbody").on("click", ".editar", function() {
         idpersona = $(this).data("ideditar");
-        mostrarPersonas(idpersona);
+        editarPersonas(idpersona);
     });
 
     $("#registrar").click(registrarPersonas);

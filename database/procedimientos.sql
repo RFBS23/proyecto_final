@@ -277,6 +277,21 @@ BEGIN
     -- Devolver los resultados
     SELECT porcentaje_aprobados AS porcentaje_aprobados, porcentaje_desaprobados AS porcentaje_desaprobados;
 END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_personas_eliminar(IN _idpersona INT)
+BEGIN
+    -- Verificar si la persona existe antes de realizar la eliminación
+    IF EXISTS (SELECT 1 FROM personas WHERE idpersona = _idpersona) THEN
+        -- Eliminar la persona de la tabla
+        DELETE FROM personas WHERE idpersona = _idpersona;
+        SELECT 'Persona eliminada correctamente.' AS mensaje;
+    ELSE
+        SELECT 'La persona no existe.' AS mensaje;
+    END IF;
+END $$
+call spu_personas_eliminar('31');
+
 /*
 delimiter $$
 create procedure spu_docentes_listar()

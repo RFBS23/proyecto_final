@@ -36,77 +36,6 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
 
         <!-- Layout container y opciones de usuarios -->
         <div class="layout-page">
-            <!-- Navbar -->
-            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                        <i class="bx bx-menu bx-sm"></i>
-                    </a>
-                </div>
-                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                    <ul class="navbar-nav flex-row align-items-center ms-auto">
-                        <!-- User -->
-                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                <div class="avatar avatar-online">
-                                    <img src="../assets/img/perfil.png" alt class="w-px-40 h-auto rounded-circle" />
-                                </div>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar avatar-online">
-                                                    <img src="../assets/img/perfil.png" alt class="w-px-40 h-auto rounded-circle" />
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block" style="text-transform: uppercase">
-                                                        <?=
-                                                        $_SESSION['login']['nombreusuario']
-                                                        ?>
-                                                    </span>
-                                                <small class="text-muted" style="text-transform: uppercase">
-                                                    <?=
-                                                    $_SESSION['login']['nivelacceso']
-                                                    ?>
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="dropdown-divider"></div>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-user me-2"></i>
-                                        <span class="align-middle">Mi Perfil</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-cog me-2"></i>
-                                        <span class="align-middle">Configuraciones</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="dropdown-divider"></div>
-                                </li>
-                                <li>
-                                    <a class="btn btn-sm btn-outline-danger dropdown-item" href="../controllers/usuario.controllers.php?operacion=destroy">
-                                        <i class="bx bx-log-out-circle"></i>
-                                        <span class="align-middle">Cerrar Sesión</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!--/ User -->
-                    </ul>
-                </div>
-            </nav>
-            <!-- / Navbar -->
             <div class="modal fade" id="modal-buscador" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                 <div class="modal-dialog modal-fullscreen" role="document">
                     <div class="modal-content">
@@ -366,11 +295,10 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                         <!-- Tabla personas -->
                         <?php if($nivelacceso == 'administrador') { ?>
                             <div class="card" style="padding: 10px;">
-                                <h1 class="py-2">Cursos:</h1>
-                                <hr>
                                 <header class="border-bottom lh-1 py-3">
                                     <div class="row flex-nowrap justify-content-between align-items-center">
-                                        <div class="col-4 pt-1">
+                                        <div class="col-4 d-flex justify-content-start">
+                                            <i class="tf-icons bx bxs-chevron-left"></i>
                                             <a class="link-secondary" href="#">Cursos anteriores</a>
                                         </div>
                                         <div class="col-4 text-center">
@@ -381,23 +309,13 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
 
                                                 </select>
                                             </label>
-                                            <!--
-                                            <select  class="form-select" id="periodoSelector" style="cursor:pointer;">
-
-                                            </select>
-                                            -->
                                         </div>
-                                        <div class="col-4 d-flex justify-content-end align-items-center">
-                                            <h5 class="btn btn-sm btn-outline-secondary" href="#">Cursos Antiguos</h5>
+                                        <div class="col-4 d-flex justify-content-end">
+                                            <a class="link-secondary" href="#">Cursos Antiguos</a>
+                                            <i class="tf-icons bx bxs-chevron-right"></i>
                                         </div>
                                     </div>
                                 </header>
-                                <!--
-                                <h1>Seleccionar Periodo:</h1>
-                                <select  class="form-select" id="periodoSelector" style="cursor:pointer;">
-
-                                </select>
-                                -->
                                 <div class="py-4">
                                     <div class="py-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosContainer"></div>
                                     <!--Aquí se mostrarán los cursos seleccionados -->
@@ -460,4 +378,5 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
     $(document).on('click', '#btnModal2', function() {
         $('#modal2').modal('show');
     });
+
 </script>

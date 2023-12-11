@@ -143,6 +143,37 @@
             </li>
         <?php } ?>
         <!-- fin estudiantes -->
+
+        <!-- soporte-->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Cerrar Sesion</span></li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <div class="avatar avatar-online">
+                    <img src="../assets/img/perfil.png" alt class="w-px-40 h-auto rounded-circle" />
+                </div>
+                <div data-i18n="Account Settings">&nbsp;
+                    <small class="fw-semibold" style="text-transform: uppercase">
+                        <?=
+                        $_SESSION['login']['nombreusuario']
+                        ?>
+                    </small>
+                    <small class="text-muted" style="text-transform: uppercase">&nbsp;
+                        <?=
+                        $_SESSION['login']['nivelacceso']
+                        ?>
+                    </small>
+                </div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="../controllers/usuario.controllers.php?operacion=destroy" class="menu-link" style="border: 1px solid red;">
+                        <i class="bx bx-log-out-circle" style="color: red;"></i>
+                        <div data-i18n="Account" style="color: red;">Cerrar Sesión</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
     </ul>
 </aside>
 <!-- / Menu -->

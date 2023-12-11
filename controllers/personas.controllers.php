@@ -11,7 +11,6 @@ if (isset($_GET['operacion'])){
                     <tr>
                             <td>{$registro['nombres']}</td>
                             <td>{$registro['apellidos']}</td>
-                            <td>{$registro['genero']}</td>
                             <td>{$registro['celular']}</td>
                             <td>{$registro['direccion']}</td>
                             <td>{$registro['fechanacimiento']}</td>
@@ -23,11 +22,11 @@ if (isset($_GET['operacion'])){
                                         <i class='bx bx-dots-vertical-rounded'></i>
                                     </button>
                                     <div class='dropdown-menu'>
-                                        <a href='#' data-ideditar='{$registro['idpersona']}' class='editar dropdown-item'>
+                                        <a href='#' data-ideditar='{$registro['idpersona']}' class='dropdown-item editar'>
                                             <i class='bx bx-edit-alt me-1 text-primary'></i>
                                             Editar
                                         </a>
-                                        <a href='#' data-ideliminar='{$registro['idpersona']}' class='eliminar dropdown-item'>
+                                        <a href='#' data-ideliminar='{$registro['idpersona']}' class='dropdown-item eliminar'>
                                             <i class='bx bx-trash me-1 text-danger'></i>
                                             Eliminar
                                         </a>
