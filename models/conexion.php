@@ -1,6 +1,6 @@
 <?php
 /*
- * class Conexion{
+    class Conexion{
         private $servidor = "localhost";
         private $puerto = "3306";
         private $baseDatos = "id21639146_sistemaolympus";

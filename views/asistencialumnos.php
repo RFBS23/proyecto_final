@@ -293,39 +293,30 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                             </div>
                                         </div>
 
-
                                         <div class="card h-100 mt-4 practica-card" id="practica-container-13" data-practica="13">
                                             <div class="card-body">
                                                 <h5 class="card-title">Examen Final</h5>
                                                 <p class="card-text">Ingresar notas</p>
                                             </div>
                                         </div>
-
                                     </div>
-
-
-
-                                    
                                     <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
-                                    <table  class="table table-striped table-hover" id="tablaResultado">
-                                        <thead>
+                                        <table  class="table table-striped table-hover" id="tablaResultado">
+                                            <thead>
                                                  <tr class="text-nowrap">
                                                     <th>#</th>
                                                     <th>Apellidos</th>
-                                                    <th>Nombres</th>   
-                                                    <th>Calificacion Final</th>   
-                            
+                                                    <th>Nombres</th>
+                                                    <th>Calificacion Final</th>
                                                 </tr>
-                                        </thead>
-                                        <tbody>
-                                           
-                                        </tbody>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
-                            
 
                             <div class="modal fade" id="modal-practica" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true" >
                             <div class="modal-dialog modal-fullscreen" role="document">
@@ -354,7 +345,6 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                                 </tbody>
                                             </table>
                                         </div>
-    
                                     </div>                                 
                                 </div>
                             </div>

@@ -29,7 +29,6 @@
                         <figure>
                             <img src="assets/login/images/administracion.jpg" alt="sing up image">
                         </figure>
-                        <a href="registro.php" class="signup-image-link">Ver Notas de Estudiantes</a>
                     </div>
 
                     <div class="signin-form">

@@ -366,14 +366,42 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                         <!-- Tabla personas -->
                         <?php if($nivelacceso == 'administrador') { ?>
                             <div class="card" style="padding: 10px;">
+                                <h1 class="py-2">Cursos:</h1>
+                                <hr>
+                                <header class="border-bottom lh-1 py-3">
+                                    <div class="row flex-nowrap justify-content-between align-items-center">
+                                        <div class="col-4 pt-1">
+                                            <a class="link-secondary" href="#">Cursos anteriores</a>
+                                        </div>
+                                        <div class="col-4 text-center">
+
+                                            <label for="id_label_single">
+                                                <h5 class="blog-header-logo text-body-emphasis text-decoration-none">Seleccione el Periodo</h5>
+                                                <select class="js-example-basic-single js-states form-control" id="periodoSelector" style="cursor:pointer;">
+
+                                                </select>
+                                            </label>
+                                            <!--
+                                            <select  class="form-select" id="periodoSelector" style="cursor:pointer;">
+
+                                            </select>
+                                            -->
+                                        </div>
+                                        <div class="col-4 d-flex justify-content-end align-items-center">
+                                            <h5 class="btn btn-sm btn-outline-secondary" href="#">Cursos Antiguos</h5>
+                                        </div>
+                                    </div>
+                                </header>
+                                <!--
                                 <h1>Seleccionar Periodo:</h1>
                                 <select  class="form-select" id="periodoSelector" style="cursor:pointer;">
 
                                 </select>
-                            </div>
-                            <div class="py-4">
-                                <div class="py-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosContainer"></div>
-                                <!--Aquí se mostrarán los cursos seleccionados -->
+                                -->
+                                <div class="py-4">
+                                    <div class="py-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosContainer"></div>
+                                    <!--Aquí se mostrarán los cursos seleccionados -->
+                                </div>
                             </div>
                         <?php } ?>
 

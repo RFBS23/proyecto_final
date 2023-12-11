@@ -116,46 +116,10 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                 </div>
                             </div>
                         </div>
-
-                        <!--
-                        <div class="py-4"></div>
-
-                        <div class="card">
-                            <h5 class="card-header">Notas Publicadas Recientemente</h5>
-                            <div class="table-responsive text-nowrap">
-                                <table class="table display table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Nombre Estudiante</th>
-                                        <th>Curso</th>
-                                        <th>Periodo</th>
-                                        <th>Promedio</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="table-border-bottom-0">
-                                        <tr>
-                                            <td>Albert Cook</td>
-                                            <td>
-                                                <strong>Angular Project</strong>
-                                            </td>
-                                            <td>
-                                                15
-                                            </td>
-                                            <td>
-                                                13.2
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
--->
-
                         <!-- cargamos el contenido dinamico -->
                         <div class="container-fluid" id="contenido-dinamico">
 
                         </div>
-
                         <!-- fin resultado publicados-->
                         <div class="my-5"></div>
                         <!-- Footer -->
@@ -168,7 +132,6 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                 <!-- Content wrapper -->
             </div>
             <!-- / Layout page -->
-
         </div>
 
         <!-- Overlay -->

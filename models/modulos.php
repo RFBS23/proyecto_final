@@ -14,7 +14,7 @@ class Modulos extends Conexion {
             $consulta = $this->acceso->prepare("CALL spu_listar_modulos(?)");
             $consulta->execute(array($nombremodulo));
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
-        }catch (Exception $e){
+        } catch (Exception $e){
             die($e->getMessage());
         }
     }
