@@ -278,6 +278,7 @@ BEGIN
     SELECT porcentaje_aprobados AS porcentaje_aprobados, porcentaje_desaprobados AS porcentaje_desaprobados;
 END $$
 
+-- nuevo procedimiento
 DELIMITER $$
 CREATE PROCEDURE spu_personas_eliminar(IN _idpersona INT)
 BEGIN

@@ -68,7 +68,7 @@ INSERT INTO usuarios (idpersona, nombreusuario, claveacceso, correo, nivelacceso
     (1, 'julianaqq', '12345', 'juli@hotmail.com', 'administrador'),
     (2, 'fabrizio', '12345', 'fabrizio@hotmail.com', 'profesor'),
     (3, 'roberto', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
-    (4, 'juan', '12345', 'robertito@hotmail.utp.pe', 'estudiante'), -- registrado recien
+    (4, 'juan', '12345', 'robertito@hotmail.utp.pe', 'estudiante'), -- registrado recien lo demas falta
     (5, 'jesus', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
     (6, 'daniela', '12345', 'juli@hotmail.com', 'administrador'),
     (7, 'carlos', '12345', 'fabrizio@hotmail.com', 'profesor'),
@@ -106,12 +106,11 @@ SELECT * FROM cursos;
 -- TABLA DOCENTES
 CREATE TABLE docentes
 (
-	iddocente			INT AUTO_INCREMENT PRIMARY KEY,
-	idpersona			INT 			NOT NULL,
-	especialidad			VARCHAR(100) 	NOT NULL,
-	cv				VARCHAR(100) 	NOT NULL,
-	numEmergencia			CHAR(9) 	NOT NULL,
-	
+	iddocente		INT AUTO_INCREMENT PRIMARY KEY,
+	idpersona		INT NOT NULL,
+	especialidad	VARCHAR(100) NOT NULL,
+	cv				VARCHAR(100) NOT NULL,
+	numEmergencia	CHAR(9) NOT NULL,
 	CONSTRAINT fk_idpersona_doc FOREIGN KEY (idpersona) REFERENCES personas (idpersona)
 );
 INSERT INTO docentes (idpersona, especialidad, cv, numemergencia) VALUES
@@ -150,11 +149,9 @@ CREATE TABLE detalles
 	CONSTRAINT fk_iddocente_det FOREIGN KEY (iddocente) REFERENCES docentes (iddocente),
 	CONSTRAINT fk_idcurso_det FOREIGN KEY (idcurso) REFERENCES cursos (idcurso)
 );
-
 INSERT INTO detalles (idmodulo, idcurso, iddocente, diainicio,fechafin, horainicio, horafin) VALUES
 		(1, 1, 1, '2023-10-11','2023-12-24', '04:00', '06:00'),
 		(1, 2, 1, '2023-10-11','2023-12-24', '02:00', '03:30');
-        
 SELECT * FROM detalles;
 
 -- TABLA ALUMNOS
@@ -162,8 +159,7 @@ CREATE TABLE alumnos
 (
 	idalumno INT AUTO_INCREMENT PRIMARY KEY,
 	idusuario INT NOT NULL,
-	
-        CONSTRAINT fk_idusuario_lis FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+	CONSTRAINT fk_idusuario_lis FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 );
 INSERT INTO alumnos (idusuario) VALUES
 	(3),
@@ -174,7 +170,6 @@ INSERT INTO alumnos (idusuario) VALUES
 	(8),
 	(9),
 	(10);
-	
 SELECT * FROM alumnos;
 
 -- TABLA ASISTENCIALUMNOS
