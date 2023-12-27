@@ -13,7 +13,7 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistema de calificaciones y asistencias</title>
+    <title>Lista de Profesores</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -36,6 +36,77 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
 
         <!-- Layout container y opciones de usuarios -->
         <div class="layout-page">
+            <!-- Navbar -->
+            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                        <i class="bx bx-menu bx-sm"></i>
+                    </a>
+                </div>
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                        <!-- User -->
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                <div class="avatar avatar-online">
+                                    <img src="../assets/img/perfil.png" alt class="w-px-40 h-auto rounded-circle" />
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar avatar-online">
+                                                    <img src="../assets/img/perfil.png" alt class="w-px-40 h-auto rounded-circle" />
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block" style="text-transform: uppercase">
+                                                        <?=
+                                                        $_SESSION['login']['nombreusuario']
+                                                        ?>
+                                                    </span>
+                                                <small class="text-muted" style="text-transform: uppercase">
+                                                    <?=
+                                                    $_SESSION['login']['nivelacceso']
+                                                    ?>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bx bx-user me-2"></i>
+                                        <span class="align-middle">Mi Perfil</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="bx bx-cog me-2"></i>
+                                        <span class="align-middle">Configuraciones</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="btn btn-sm btn-outline-danger dropdown-item" href="../controllers/usuario.controllers.php?operacion=destroy">
+                                        <i class="bx bx-log-out-circle"></i>
+                                        <span class="align-middle">Cerrar Sesión</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--/ User -->
+                    </ul>
+                </div>
+            </nav>
+            <!-- / Navbar -->
             <div class="modal fade" id="modal-buscador" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                 <div class="modal-dialog modal-fullscreen" role="document">
                     <div class="modal-content">
@@ -72,11 +143,6 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                         <div class="card mb-4">
                                             <div class="d-flex align-items-start align-items-sm-center gap-4">
                                                 <img src="../assets/img/avatars/1.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar"/>
-                                                <div class="mb-3 gap-4">
-                                                    <label for="firstName" class="form-label" id="nombrecurso">
-                                                        nombre curso
-                                                    </label>
-                                                </div>
                                             </div>
                                         </div>
                                         <hr class="my-0" />
@@ -129,12 +195,13 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                         <table  class="table table-striped table-hover" id="tablasAsistencia">
                                             <thead>
                                                 <tr class="text-nowrap">
-                                                    <th></th>
+                                                    <th>#</th>
                                                     <th>Apellidos</th>
                                                     <th>Nombres</th>
-                                                    <th>Estado</th>
-                                                    <th class="text-center">Opciones</th>
+                                                    <th style="display: none;">nombreusuario</th>   
+                                                    <th>Estado</th>                              
                                                 </tr>
+                                                <button type="button" class="btn btn-danger" id='GenerarReporteA'>REPORTE</button>
                                             </thead>
                                             <tbody>
                                             <!-- Contenido de la tabla -->
@@ -227,117 +294,110 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
                                             </div>
                                         </div>
 
+
                                         <div class="card h-100 mt-4 practica-card" id="practica-container-13" data-practica="13">
                                             <div class="card-body">
                                                 <h5 class="card-title">Examen Final</h5>
                                                 <p class="card-text">Ingresar notas</p>
                                             </div>
                                         </div>
+
                                     </div>
 
-                                    <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
-                                        <table  class="table table-striped table-hover" id="tablaResultado">
-                                            <thead>
-                                                 <tr class="text-nowrap">
-                                                    <th></th>
-                                                    <th>Apellidos</th>
-                                                    <th>Nombres</th>
-                                                    <th>Calificacion Final</th>
-                                                     <th>Ver Calificaciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
 
-                                            </tbody>
+
+                                    
+                                    <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                                    <table  class="table table-striped table-hover" id="tablaResultado">
+                                        <thead>
+                                                 <tr class="text-nowrap">
+                                                    <th>#</th>
+                                                    <th>Apellidos</th>
+                                                    <th>Nombres</th>   
+                                                    <th>Calificacion Final</th>   
+                            
+                                                </tr>
+
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
                                         </table>
                                     </div>
 
                                 </div>
                             </div>
-                            <div class="modal fade" id="modal-practica" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-                                <div class="modal-dialog modal-fullscreen" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-body" >
-                                            <div class="card-body">
-                                                <div id="mensajeRegistro"></div>
-                                                <div id="fechaHoraTh"></div>
-                                                </div>
-                                                <div class="card-body">
-                                                    <table  class="table table-striped table-hover"  id="tablaPractica" >
-                                                        <thead>
-                                                            <tr class="text-nowrap">
-                                                                <th></th>
-                                                                <th>Apellidos</th>
-                                                                <th>Nombres</th>
-                                                                <th>Calificacion</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                            
 
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-danger rounded-pill" data-bs-dismiss="modal">Cerrar</button>
-                                                </div>
-                                            </div>
+                            <div class="modal fade" id="modal-practica" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true" >
+                            <div class="modal-dialog modal-fullscreen" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body" >
+
+                                        <div class="card-body">
+                                            <div id="mensajeRegistro"></div>
+                                            <div id="fechaHoraTh"></div>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        </div> 
+
+                                        <div class="card-body"> 
+                                            <table  class="table table-striped table-hover"  id="tablaPractica" >
+                                                <thead>
+                                                    <tr class="text-nowrap">
+                                                        <th>#</th>
+                                                        <th>Apellidos</th>
+                                                        <th>Nombres</th>
+                                                        <th>Calificacion</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
+    
+                                    </div>                                 
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <!-- Tabla personas -->
-                        <?php if($nivelacceso == 'administrador') { ?>
-                            <div class="card" style="padding: 10px;">
-                                <header class="border-bottom lh-1 py-3">
-                                    <div class="row flex-nowrap justify-content-between align-items-center">
-                                        <div class="col-4 d-flex justify-content-start">
-                                            <i class="tf-icons bx bxs-chevron-left"></i>
-                                            <a class="link-secondary" href="#">Cursos anteriores</a>
-                                        </div>
-                                        <div class="col-4 text-center">
-
-                                            <label for="id_label_single">
-                                                <h5 class="blog-header-logo text-body-emphasis text-decoration-none">Seleccione el Periodo</h5>
-                                                <select class="js-example-basic-single js-states form-control" id="periodoSelector" style="cursor:pointer;">
-
-                                                </select>
-                                            </label>
-                                        </div>
-                                        <div class="col-4 d-flex justify-content-end">
-                                            <a class="link-secondary" href="#">Cursos Antiguos</a>
-                                            <i class="tf-icons bx bxs-chevron-right"></i>
-                                        </div>
-                                    </div>
-                                </header>
-                                <div class="py-4">
-                                    <div class="py-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosContainer"></div>
-                                    <!--Aquí se mostrarán los cursos seleccionados -->
-                                </div>
-                            </div>
-                        <?php } ?>
-
-                        <div class="my-5"></div>
-                        <!-- Footer -->
-                        <?php include '../assets/layout/footer.php' ?>
-                        <!-- / Footer -->
-                    </div>
-                    <!-- / Content -->
-                    <div class="content-backdrop fade"></div>
-                </div>
-                <!-- Content wrapper -->
             </div>
-            <!-- / Layout page -->
         </div>
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <!-- Tabla personas -->
+                    <?php if($nivelacceso == 'administrador') { ?>
+                        <div class="card" style="padding: 10px;">
+                            <h1>Seleccionar Periodo:</h1>
+                            <select  class="form-select" id="periodoSelector">
+                            </select>
+                        </div>
+                        <div class="py-4">
+                            <div class="py-3 row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cursosContainer"></div>
+                            <!--Aquí se mostrarán los cursos seleccionados -->
+                        </div>
+                    <?php } ?>
+                    
+                    <div class="my-5"></div>
+                    <!-- Footer -->
+                    <?php include '../assets/layout/footer.php' ?>
+                    <!-- / Footer -->
+                </div>
+                <!-- / Content -->
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
     </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
 </body>
 </html>
 
@@ -378,5 +438,4 @@ $nivelacceso = $_SESSION['login']['nivelacceso'];
     $(document).on('click', '#btnModal2', function() {
         $('#modal2').modal('show');
     });
-
 </script>

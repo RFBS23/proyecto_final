@@ -26,6 +26,7 @@ BEGIN
 END $$
 
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica2(
     IN _idresultado INT,
     IN _practica2 DECIMAL(4, 2)
@@ -50,7 +51,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica3(
     IN _idresultado INT,
     IN _practica3 DECIMAL(4, 2)
@@ -75,7 +78,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica4(
     IN _idresultado INT,
     IN _practica4 DECIMAL(4, 2)
@@ -101,6 +106,7 @@ BEGIN
 END $$
 
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica5(
     IN _idresultado INT,
     IN _practica5 DECIMAL(4, 2)
@@ -126,6 +132,7 @@ BEGIN
 END $$
 
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica6(
     IN _idresultado INT,
     IN _practica6 DECIMAL(4, 2)
@@ -152,6 +159,7 @@ END $$
 
 
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica7(
     IN _idresultado INT,
     IN _practica7 DECIMAL(4, 2)
@@ -176,7 +184,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica8(
     IN _idresultado INT,
     IN _practica8 DECIMAL(4, 2)
@@ -201,7 +211,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica9(
     IN _idresultado INT,
     IN _practica9 DECIMAL(4, 2)
@@ -226,7 +238,10 @@ BEGIN
     END IF;
 END $$
 
+
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica10(
     IN _idresultado INT,
     IN _practica10 DECIMAL(4, 2)
@@ -251,7 +266,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica11(
     IN _idresultado INT,
     IN _practica11 DECIMAL(4, 2)
@@ -276,7 +293,9 @@ BEGIN
     END IF;
 END $$
 
+
 DELIMITER $$
+
 CREATE PROCEDURE RegistrarPractica12(
     IN _idresultado INT,
     IN _practica12 DECIMAL(4, 2)
@@ -303,7 +322,9 @@ END $$
 
 -- exmane
 
+
 DELIMITER $$
+
 CREATE PROCEDURE Registrarexamen(
     IN _idresultado INT,
     IN _examenfinal DECIMAL(4, 2)
@@ -334,6 +355,7 @@ BEGIN
     SELECT idresultado,  LPAD(ROUND(practica1), 2, '0') AS practica1
     FROM evaluacion;
 END $$
+
 
 DELIMITER $$ 
 CREATE PROCEDURE listarpractica2()
@@ -429,6 +451,8 @@ BEGIN
     FROM evaluacion;
 END $$
 
+
+
 DELIMITER $$
 CREATE PROCEDURE ListarPracticasExamen(IN _idalumno INT)
 BEGIN
@@ -440,6 +464,7 @@ BEGIN
     JOIN evaluacion  ON resultados.idresultado = evaluacion.idresultado
     WHERE resultados.idalumno = _idalumno;
 END $$
+
 
 CALL RegistrarPractica1(1, 20);
 CALL RegistrarPractica2(1, 20);

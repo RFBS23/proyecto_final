@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS sistemaolympus;
 CREATE DATABASE sistemaolympus;
 USE sistemaolympus;
@@ -18,7 +19,7 @@ CREATE TABLE personas (
 );
 
 INSERT INTO personas(nombres, apellidos, genero, celular, direccion, fechanacimiento, tipodocumento, numerodocumento) VALUES
-    ('JULIANA', 'QUINTO QUINTANA', 'mujer', '987899241', 'por ahi', '2002-03-10', 'cde', '287654321'),
+    ('ADMIN', 'ADMIN', 'mujer', '987899241', 'por ahi', '2002-03-10', 'cde', '287654321'),
     ('FABRIZIO', 'BARRIOS SAVEDRA' , 'hombre', '987653241', 'las palmeras', '2023-03-19', 'dni', '16385274'),
     ('ROBERTO', 'SUKENBER QUISPE', 'hombre', '987653111', 'las palmeras', '1999-06-19', 'dni', '16395256'),
     ('JUAN', 'GALVEZ GUERRA', 'hombre', '987653111', 'las palmeras', '1999-06-19', 'dni', '76767676');
@@ -65,29 +66,40 @@ CREATE TABLE usuarios (
     CONSTRAINT ck_nivelacceso_usuario CHECK (nivelacceso IN ('administrador', 'estudiante', 'profesor'))
 );
 INSERT INTO usuarios (idpersona, nombreusuario, claveacceso, correo, nivelacceso) VALUES
-    (1, 'julianaqq', '12345', 'juli@hotmail.com', 'administrador'),
+    (1, 'admin', '12345', 'juli@hotmail.com', 'administrador'),
+    
     (2, 'fabrizio', '12345', 'fabrizio@hotmail.com', 'profesor'),
-    (3, 'roberto', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
-    (4, 'juan', '12345', 'robertito@hotmail.utp.pe', 'estudiante'), -- registrado recien lo demas falta
-    (5, 'jesus', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
-    (6, 'daniela', '12345', 'juli@hotmail.com', 'administrador'),
-    (7, 'carlos', '12345', 'fabrizio@hotmail.com', 'profesor'),
+    (3, 'roberto', '12345', 'robertito@hotmail.utp.pe', 'profesor'),   
+    (4, 'juan', '12345', 'robertito@hotmail.utp.pe', 'profesor'),
+    (5, 'jesus', '12345', 'robertito@hotmail.utp.pe', 'profesor'),
+    
+    (6, 'daniela', '12345', 'juli@hotmail.com', 'estudiante'),
+    (7, 'carlos', '12345', 'fabrizio@hotmail.com', 'estudiante'),
     (8, 'keara', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
     (9, 'edu', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
-    (10, 'carla', '12345', 'robertito@hotmail.utp.pe', 'estudiante');
+    (10, 'carla', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
+    (11, 'silvia', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
+    (12, 'juanG', '12345', 'robertito@hotmail.utp.pe', 'estudiante'),
+    (13, 'jose', '12345', 'robertito@hotmail.utp.pe', 'estudiante');
 
-    
+    SELECT * FROM usuarios;
 -- le actualizamos la clave 12345 (encriptado)
 UPDATE usuarios SET claveacceso = '$2y$10$63.J.K3knaWLWcT6EHUKr.3Xzt9n5IFmDjtirprFMma3CAzvwibv2' WHERE idusuario = 1;
+
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 2;
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 3;
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 4;
 UPDATE usuarios SET claveacceso = '$2y$10$63.J.K3knaWLWcT6EHUKr.3Xzt9n5IFmDjtirprFMma3CAzvwibv2' WHERE idusuario = 5;
+
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 6;
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 7;
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 8;
 UPDATE usuarios SET claveacceso = '$2y$10$63.J.K3knaWLWcT6EHUKr.3Xzt9n5IFmDjtirprFMma3CAzvwibv2' WHERE idusuario = 9;
 UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 10;
+UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 11;
+UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 12;
+UPDATE usuarios SET claveacceso = '$2y$10$S.wXCodQx/jvWnzCkp3JxOIt2n/YuW8Vk86g4Nm5Rtl88AHvGkfoK' WHERE idusuario = 13;
+
 SELECT * FROM usuarios;
 
 -- TABLA CURSOS
@@ -106,18 +118,19 @@ SELECT * FROM cursos;
 -- TABLA DOCENTES
 CREATE TABLE docentes
 (
-	iddocente		INT AUTO_INCREMENT PRIMARY KEY,
-	idpersona		INT NOT NULL,
-	especialidad	VARCHAR(100) NOT NULL,
-	cv				VARCHAR(100) NOT NULL,
-	numEmergencia	CHAR(9) NOT NULL,
+	iddocente			INT AUTO_INCREMENT PRIMARY KEY,
+	idpersona			INT 			NOT NULL,
+	especialidad			VARCHAR(100) 	NOT NULL,
+	cv				VARCHAR(100) 	NOT NULL,
+	numEmergencia			CHAR(9) 	NOT NULL,
+	
 	CONSTRAINT fk_idpersona_doc FOREIGN KEY (idpersona) REFERENCES personas (idpersona)
 );
 INSERT INTO docentes (idpersona, especialidad, cv, numemergencia) VALUES
-	(1, 'Taller de dibujo', 'cv.pdf', '985231694'),
-	(6, 'Oratoria y Liderazgo', 'prueba.pdf', '998852194'),
-	(7, 'Lectura', 'prueba.pdf', '998852194'),
-	(8, 'Seminario Sabatinos', 'prueba.pdf', '998852194');
+	(2, 'Taller de dibujo', 'cv.pdf', '985231694'),
+	(3, 'Oratoria y Liderazgo', 'cv.pdf', '985231694'),
+	(4, 'Lectura', 'prueba.pdf', '998852194'),
+	(5, 'Seminario Sabatinos', 'prueba.pdf', '998852194');
 SELECT * FROM docentes;
 
 -- TABLA MODULOS
@@ -149,9 +162,13 @@ CREATE TABLE detalles
 	CONSTRAINT fk_iddocente_det FOREIGN KEY (iddocente) REFERENCES docentes (iddocente),
 	CONSTRAINT fk_idcurso_det FOREIGN KEY (idcurso) REFERENCES cursos (idcurso)
 );
+
 INSERT INTO detalles (idmodulo, idcurso, iddocente, diainicio,fechafin, horainicio, horafin) VALUES
-		(1, 1, 1, '2023-10-11','2023-12-24', '04:00', '06:00'),
-		(1, 2, 1, '2023-10-11','2023-12-24', '02:00', '03:30');
+		(1, 1, 1, '2023-10-11','2023-12-24', '02:00', '03:30'),
+		(1, 2, 2, '2023-10-11','2023-12-24', '04:00', '06:00'),
+		(1, 3, 3, '2023-10-11','2023-12-24', '04:00', '06:00'),
+		(1, 4, 4, '2023-10-11','2023-12-24', '02:00', '03:30');
+		
 SELECT * FROM detalles;
 
 -- TABLA ALUMNOS
@@ -159,17 +176,20 @@ CREATE TABLE alumnos
 (
 	idalumno INT AUTO_INCREMENT PRIMARY KEY,
 	idusuario INT NOT NULL,
-	CONSTRAINT fk_idusuario_lis FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
+	
+        CONSTRAINT fk_idusuario_lis FOREIGN KEY (idusuario) REFERENCES usuarios (idusuario)
 );
 INSERT INTO alumnos (idusuario) VALUES
-	(3),
-	(4),
-	(5),
 	(6),
 	(7),
 	(8),
 	(9),
-	(10);
+	(10),
+	(11),
+	(12),
+	(13);
+	
+	
 SELECT * FROM alumnos;
 
 -- TABLA ASISTENCIALUMNOS
@@ -193,6 +213,8 @@ INSERT INTO asistenciaalumnos (iddetalle, idalumno ) VALUES
 	(2, 6),
 	(2, 7),
 	(2, 8);
+
+
 SELECT * FROM asistenciaalumnos;
 
 CREATE TABLE asistenciahistoricas (
@@ -203,6 +225,7 @@ CREATE TABLE asistenciahistoricas (
     CONSTRAINT fk_idalumno_historico FOREIGN KEY (idalumno) REFERENCES alumnos (idalumno)
 );
 SELECT * FROM asistenciahistoricas;
+
 
 -- TABLA RESULTADO
 CREATE TABLE resultados

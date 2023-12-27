@@ -17,7 +17,6 @@ BEGIN
     WHERE modulos.nombremodulo = _nombremodulo;
 END $$
 
-CALL spu_listar_modulos("CEO2023/09")
 
 DELIMITER $$
 CREATE PROCEDURE spu_alumnos_del_curso(IN nombrecurso VARCHAR(50))
@@ -26,17 +25,19 @@ BEGIN
 	asistenciaalumnos.idasistencia,
         personas.apellidos AS Apellidos,
         personas.nombres AS Nombres,
+        usuarios.nombreusuario AS NombreUsuarios,
         asistenciaalumnos.estadoasistencia AS Estado
     FROM asistenciaalumnos
     INNER JOIN detalles ON asistenciaalumnos.iddetalle = detalles.iddetalle
     INNER JOIN cursos ON detalles.idcurso = cursos.idcurso
     INNER JOIN alumnos ON asistenciaalumnos.idalumno = alumnos.idalumno
     INNER JOIN personas ON alumnos.idusuario = personas.idpersona
-    WHERE cursos.nombrecurso = nombrecurso;
+    INNER JOIN usuarios ON personas.idpersona = usuarios.idpersona
+    WHERE cursos.nombrecurso = nombrecurso AND CURDATE();
 END $$
 
-CALL spu_alumnos_del_curso ('Taller de dibujo');
 
+CALL spu_alumnos_del_curso('Taller de Dibujo')
 
 DELIMITER $$
 CREATE PROCEDURE spu_alumnos_del_curso_resultados(IN nombrecurso VARCHAR(50))
@@ -54,7 +55,6 @@ BEGIN
     WHERE cursos.nombrecurso = nombrecurso;
 END $$
 
-CALL spu_alumnos_del_curso_practica ('Taller de dibujo');
 
 DELIMITER $$
 CREATE PROCEDURE spu_alumnos_del_curso_practica(IN nombrecurso VARCHAR(50))
@@ -79,10 +79,13 @@ CREATE PROCEDURE spu_asistencia_actualizar
     IN _estadoasistencia VARCHAR(20)
 )
 BEGIN
+
     UPDATE asistenciaalumnos SET
         estadoasistencia = _estadoasistencia,
         fechaasistencia = CURDATE()
     WHERE idasistencia = _idasistencia;
+
+
     INSERT INTO asistenciahistoricas (fecha, idalumno, estadoasistencia)
     SELECT CURDATE(), idalumno, _estadoasistencia
     FROM asistenciaalumnos
@@ -96,6 +99,7 @@ BEGIN
     DECLARE total_practicas DECIMAL(4, 2);
     DECLARE examen_final DECIMAL(4, 2);
     DECLARE calificacion_final DECIMAL(4, 2);
+
     -- Calcula la suma de las 12 prácticas
     SELECT
         (practica1 + practica2 + practica3 + practica4 + practica5 +
@@ -104,14 +108,18 @@ BEGIN
     INTO total_practicas
     FROM evaluacion
     WHERE idresultado = _idresultado;
+
     -- Obtiene la calificación del examen final
     SELECT examenfinal INTO examen_final FROM evaluacion WHERE idresultado = _idresultado;
+
     -- Calcula la calificación final
     SET calificacion_final = (total_practicas + examen_final) / 2;
+
     -- Actualiza la calificación final en la tabla resultados
     UPDATE resultados
     SET calificacion = calificacion_final
     WHERE idresultado = _idresultado;
+
 END $$
 
 CALL ActualizarCalificacionFinal(3); -- Cambia 1 por el idevaluacion que desees
@@ -120,7 +128,7 @@ SELECT * FROM evaluacion;
 
 DELIMITER $$
 CREATE PROCEDURE spu_personas_registrar(
-	IN _nombres 			VARCHAR(70),
+IN _nombres 			VARCHAR(70),
     IN _apellidos 			VARCHAR(70),
     IN _genero 				VARCHAR(50),
     IN _celular 			CHAR(9),
@@ -176,13 +184,6 @@ BEGIN
     WHERE nivelacceso = 'estudiante';
 END $$
 
-DELIMITER $$
-CREATE PROCEDURE spu_cursos_cantidad()
-BEGIN
-	SELECT COUNT(*) AS totalcursos
-    FROM cursos;
-END $$
-
 Delimiter $$
 create procedure spu_modulos_cantidad()
 begin
@@ -191,13 +192,18 @@ begin
 end $$
 call spu_modulos_cantidad();
 
-delimiter $$
-create procedure spu_resultado_cantidad()
-begin
-	select count(*) as totalresultados
-    from evaluacion;
-end $$
-call spu_resultado_cantidad();
+DELIMITER $$
+CREATE PROCEDURE spu_cursos_cantidad()
+BEGIN
+	SELECT COUNT(*) AS totalcursos
+    FROM cursos;
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_resultado_cantidad()
+BEGIN
+	SELECT COUNT(*) FROM resultado;
+END $$
 
 DELIMITER $$
 CREATE PROCEDURE spu_porcentaje_asistencia(
@@ -293,26 +299,5 @@ BEGIN
 END $$
 call spu_personas_eliminar('31');
 
-/*
-delimiter $$
-create procedure spu_docentes_listar()
-begin 
-	select
-		docentes.idpersona, personas.nombres, personas.apellidos, personas.genero,
-        personas.tipodocumento, personas.numerodocumento, docentes.especialidad,
-        docentes.cv, docentes.numEmergencia, usuarios.nivelacceso
-        from docentes
-        inner join personas on personas.idpersona = docentes.idpersona
-        inner join usuarios on usuarios.idusuario = docentes.idpersona
-        order by iddocente ASC;
-end $$
-CALL spu_docentes_listar();
-DELIMITER $$
-CREATE PROCEDURE ListarProfesores()
-BEGIN
-    SELECT d.iddocente, p.nombres, p.apellidos, d.especialidad, d.cv, d.numEmergencia
-    FROM docentes d
-    JOIN personas p ON d.idpersona = p.idpersona;
-END $$
-CALL ListarProfesores();
-*/
+
+

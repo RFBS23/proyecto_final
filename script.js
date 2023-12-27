@@ -9,6 +9,42 @@ document.addEventListener('DOMContentLoaded', function () {
     const cuerpotabla1 = tablaResultado.querySelector('tbody');
     const tablaPractica = document.querySelector('#tablaPractica');
     const cuerpotablaPractica = tablaPractica.querySelector('tbody');
+    const btnasistencia = document.getElementById('GenerarReporteA');
+
+
+
+    function cargarNombresModulo() {
+        const parametros = new URLSearchParams();
+        parametros.append("operacion", "listarnombremodulo");
+    
+        fetch(`../controllers/modulos.controllers.php`, {
+            method: 'POST',
+            body: parametros
+        })
+        .then(response => response.json())
+        .then(datos => {
+            periodoSelector.innerHTML = ''; 
+    
+            datos.forEach(element => {
+                const optionTag = document.createElement("option");
+                optionTag.text = element.nombremodulo;
+                periodoSelector.appendChild(optionTag);
+            });
+    
+    
+            if (datos.length > 0) {
+                periodoSelector.value = datos[datos.length - 1].nombremodulo;
+            }
+    
+    
+            cargarCursos(periodoSelector.value);
+    
+    
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 
     // Función para cargar cursos desde el servidor
     function cargarCursos(periodoSeleccionado) {
@@ -43,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     card.addEventListener('click', function () {
                         // Abre el modal
                         $('#modal-buscador').modal('show');
-
                         // Adjunta un evento para ejecutar la función cuando el modal se muestra
                         $('#modal-buscador').on('shown.bs.modal', function onModalShown() {
                             const nombreCurso = cursos.Cursos;
@@ -52,41 +87,18 @@ document.addEventListener('DOMContentLoaded', function () {
                             cargarEstudiantesPractica(nombreCurso);
                             // Remueve el controlador de eventos después de que el modal se ha mostrado
                             $(this).off('shown.bs.modal', onModalShown);
+
                         });
+
                     });
+                    
                     cursosContainer.appendChild(card);
+                    
+    
                 });
             })
     }
 
-    function cargarNombresModulo() {
-        const parametros = new URLSearchParams();
-        parametros.append("operacion", "listarnombremodulo");
-
-        fetch(`../controllers/modulos.controllers.php`, {
-            method: 'POST',
-            body: parametros
-        })
-            .then(response => response.json())
-            .then(datos => {
-                periodoSelector.innerHTML = ""; // Limpia el contenido actual
-
-                datos.forEach(element => {
-                    const optionTag = document.createElement("option");
-                    optionTag.text = element.nombremodulo;
-                    periodoSelector.appendChild(optionTag);
-                });
-
-                // Después de cargar los periodos, selecciona automáticamente el último periodo
-                if (datos.length > 0) {
-                    periodoSelector.value = datos[datos.length - 2].nombremodulo; //se muestra la cantidad de cursos que esta en cada periodo
-                    cargarCursos(periodoSelector.value); // Carga automáticamente los cursos para el último periodo
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
 
     function getInitialAvatar(apellidos, nombres) {
         //const initials = lastName.charAt(0).toUpperCase();
@@ -122,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </td>
                             <td style="width: 20%;">${Alumno.Apellidos}</td>
                             <td style="width: 20%;">${Alumno.Nombres}</td>
+                            <td style='display: none;'>${Alumno.NombreUsuarios}</td>
                             <td class="attendance-status" data-idasistencia="${Alumno.idasistencia}" style="width: 15%;">${Alumno.Estado}</td>
                             <td>
                                 <input type="radio" class="btn-check" name="attendance-options-${Alumno.idasistencia}" id="presente-${Alumno.idasistencia}" value="PRESENTE" ${Alumno.Estado === 'PRESENTE' ? 'checked' : ''}>
@@ -135,6 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                                 <input type="radio" class="btn-check" name="attendance-options-${Alumno.idasistencia}" id="justificado-${Alumno.idasistencia}" value="JUSTIFICADO" ${Alumno.Estado === 'JUSTIFICADO' ? 'checked' : ''}>
                                 <label class="btn btn-outline-info" for="justificado-${Alumno.idasistencia}">JUSTIFICADO</label>
+                            </td>
+
+                            <td>
+                             <label class="btn btn-danger btn-alumnos" data-usuarios='${Alumno.NombreUsuarios}'>PDF</label>
                             </td>
                         </tr>
                     `;
@@ -165,6 +182,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             });
+
+            $("#tablasAsistencia").on("click", ".btn-alumnos", function(){
+                nombreusuario = $(this).data("usuarios")
+                reporteasistenciausuario(nombreCurso, nombreusuario)
+            })
+
+            btnasistencia.addEventListener("click", function(){
+                reporteasistencia(nombreCurso);
+            })
+    }
+
+    function reporteasistenciausuario(nombrecurso, nombreusuario){
+        const parametros = new URLSearchParams();
+        parametros.append("nombrecurso", nombrecurso);
+        parametros.append("nombreusuario", nombreusuario);
+        window.open(`../reports/asistencia.report.php?${parametros}`,`_blank`)
+    }
+
+    function reporteasistencia(nombreCurso){
+        const parametros = new URLSearchParams();
+        parametros.append("nombreCurso", nombreCurso);
+        window.open(`../reports/estados.report.php?${parametros}`, `_blank`);
+
     }
 
     function cargarEstudiantesPractica(nombreCurso) {
@@ -201,15 +241,23 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             $(document).ready(function () {
-                //$(document).off('input', '.nota-practica');
-                $(document).on('input', '.nota-practica', function () {
+
+                $(document).on('blur', '.nota-practica', function () {
                     const idresultado = $(this).data('idresultado');
                     const notaPractica = $(this).val();
-                    const practicaNumeroModal = $('#modal-practica').data('practicaNumero');
-                    registrarPractica(idresultado, practicaNumeroModal, notaPractica);
-                    $(this).data('registrado', true);
-                    mostrarMensaje("LA NOTA SE AGREGO CORRECTAMENTE");
+
+                    // Verifica que la longitud de la nota sea mayor a cero y menor o igual a dos
+                    if (notaPractica.length > 0 && notaPractica.length <= 2) {
+                        const practicaNumeroModal = $('#modal-practica').data('practicaNumero');
+                        registrarPractica(idresultado, practicaNumeroModal, notaPractica);
+                        $(this).data('registrado', true);
+                        mostrarMensaje("LA NOTA SE AGREGO CORRECTAMENTE");
+                    } else {
+                        // Muestra un mensaje de error si la longitud de la nota no es válida
+                        mostrarMensaje("Ingrese una nota válida (máximo 2 dígitos)");
+                    }
                 });
+
 
                 $('.practica-card').click(function () {
                     const practicaNumero = $(this).data('practica');
@@ -245,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#mensajeRegistro').text(mensaje);
                 setTimeout(function() {
                     $('#mensajeRegistro').text('');
-                }, 3000);
+                }, 1000);
             }
 
             function limpiarInputsPractica() {
@@ -334,111 +382,160 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${Alumno.Apellidos}</td>
                             <td>${Alumno.Nombres}</td>
                             <td id="calificacion-${Alumno.idresultado}">${Alumno.Calificacion}</td>
-
                             <td> 
-                                <button type="button" class="btn btn-primary btn-modal-calificaciones" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calificaciones</button>
-                                <div id="${modalId}" class="modal fade" role="dialog" style="overflow-y: scroll;">
-                                    <div class="modal-dialog modal-xl">
-                                        <div class="modal-content">
+                                <button type="button" class="btn btn-outline-success btn-modal-calificaciones" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calificaciones</button>
+
+                                <div id="${modalId}" class="modal fade" tabindex="-1" aria-hidden="true" style="overflow-y: scroll; display: none;">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                        <div class="modal-content" style="border-radius: 10px;">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Calificaciones</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
+                                                <h4 class="modal-title badge bg-label-success" id="exampleModalLabel">Calificaciones</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                                           </div>
                                             <div class="modal-body">
-                                            <form class="row g-4 needs-validation" novalidate>
-                                                <label for="zipCode" class="form-label">NOTAS DE DE PRACTICAS</label>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica1" value="" readonly>
-                                                    <label for="floatingInput">Practica 1<label>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <div class="row g-0 border border-success rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                                            <div class="col p-4 d-flex flex-column position-static">
+                                                                <h6 class="mb-0">
+                                                                    <img src="${getInitialAvatar(Alumno.Apellidos, Alumno.Nombres)}" alt="Avatar" style="border-radius: 50%; width: 40px; height: 40px;">
+                                                                    &nbsp;&nbsp;
+                                                                    ${Alumno.Apellidos} ${Alumno.Nombres}
+                                                                </h6>
+                                                                <div class="mb-1 text-body-secondary">
+                                                                    Nota: <span class="badge bg-label-success">${Alumno.Calificacion}</span>
+                                                                </div>
+                                                                <p class="card-text mb-auto" id="fechaHoraTh"></p>
+                                                            </div>
+                                                            <button type="button" class="btn btn-outline-primary btn-calcular-calificacion" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calcular Calificación</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg">
+                                                        <!-- cards -->
+                                                        <div class="col p-2 d-flex flex-column">                                                                
+                                                            <div class="col-lg">
+                                                                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
+                                                                    <div class="col p-2 d-flex flex-column">
+                                                                        <form class="row g-4 needs-validation" novalidate>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica1" value="" readonly>
+                                                                                <label for="floatingInput">Practica 1<label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica2"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 2</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica3"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 3</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3 ">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica4"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 4</label>
+                                                                            </div>                                                                    
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-lg">
+                                                                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
+                                                                    <div class="col p-2 d-flex flex-column">
+                                                                        <form class="row g-4 needs-validation" novalidate>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control " placeholder="nota" id="Practica5" value="" readonly>
+                                                                                <label for="floatingInput">Practica 5</label>
+                                                                            </div>
+                                        
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica6" value="" readonly>
+                                                                                <label for="floatingInput">Practica 6</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica7" value="" readonly>
+                                                                                <label for="floatingInput">Practica 7</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica8"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 8</label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-lg">
+                                                                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-3 shadow-sm h-md-250 position-relative">
+                                                                    <div class="col p-2 d-flex flex-column">
+                                                                        <form class="row g-4 needs-validation" novalidate>
+                                                                            <div class="form-floating col-md-3 ">
+                                                                                <input type="number" class="form-control " placeholder="nota" id="Practica9"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 9</label>
+                                                                            </div>
+                                        
+                                                                            <div class="form-floating col-md-3 ">
+                                                                                <input type="number" class="form-control " placeholder="nota" id="Practica10" value="" readonly>
+                                                                                <label for="floatingInput">Practica 10</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica11"   value="" readonly>
+                                                                                <label for="floatingInput">Practica 11</label>
+                                                                            </div>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="Practica12"  value="" readonly>
+                                                                                <label for="floatingInput">Practica 12</label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-lg">
+                                                                <div class="row g-0 border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative">
+                                                                    <div class="col p-2 d-flex flex-column">
+                                                                        <form class="row g-4 needs-validation" novalidate>
+                                                                            <span class="badge bg-label-success">EXAMEN FINAL</span>
+                                                                            <div class="form-floating col-md-3">
+                                                                                <input type="number" class="form-control" placeholder="nota" id="examenfinal"  value=""readonly>
+                                                                                <label for="floatingInput">Examen Final</label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- fin cards -->
+                                                    </div>                                                    
                                                 </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica2"  value="" readonly>
-                                                    <label for="floatingInput">Practica 2</label>
-                                                </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica3"  value="" readonly>
-                                                    <label for="floatingInput">Practica 3</label>
-                                                </div>
-                                                <div class="form-floating col-md-3 ">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica4"  value="" readonly>
-                                                    <label for="floatingInput">Practica 4</label>
-                                                </div>
-            
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control " placeholder="nota" id="Practica5" value="" readonly>
-                                                    <label for="floatingInput">Practica 5</label>
-                                                </div>
-            
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica6" value="" readonly>
-                                                    <label for="floatingInput">Practica 6</label>
-                                                </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica7" value="" readonly>
-                                                    <label for="floatingInput">Practica 7</label>
-                                                </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica8"  value="" readonly>
-                                                    <label for="floatingInput">Practica 8</label>
-                                                </div>
-                                                <div class="form-floating col-md-3 ">
-                                                    <input type="number" class="form-control " placeholder="nota" id="Practica9"  value="" readonly>
-                                                    <label for="floatingInput">Practica 9</label>
-                                                </div>
-            
-                                                <div class="form-floating col-md-3 ">
-                                                    <input type="number" class="form-control " placeholder="nota" id="Practica10" value="" readonly>
-                                                    <label for="floatingInput">Practica 10</label>
-                                                </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica11"   value="" readonly>
-                                                    <label for="floatingInput">Practica 11</label>
-                                                </div>
-                                                <div class="form-floating col-md-3">
-                                                    <input type="number" class="form-control" placeholder="nota" id="Practica12"  value="" readonly>
-                                                    <label for="floatingInput">Practica 12</label>
-                                                </div>
-            
-                                                <label for="zipCode" class="form-label">PROMEDIO FINAL</label>
-                                                <div class="form-floating col-md-3 ">
-                                                    <input type="number" class="form-control" placeholder="nota" id="examenfinal"  value=""readonly>
-                                                    <label for="floatingInput">Examen Final</label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-primary btn-calcular-calificacion" data-idresultado="${Alumno.idresultado}" data-modal-id="${modalId}">Calcular Calificación</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                cuerpotabla1.innerHTML += fila;
-                numeroFila++;
-            });
-
-            $(document).on('click', '.btn-modal-calificaciones', function () {
-                const modalId = $(this).data('modal-id');
-
-                $(`#${modalId}`).modal('show');
-
-                const idresultado = $(this).data('idresultado');
-                ListarPractica(idresultado, modalId);
-            });
-
-            $(document).off('click', '.btn-calcular-calificacion').on('click', '.btn-calcular-calificacion', function () {
-                const idresultado = $(this).data('idresultado');
-                CalcularCalificacion(idresultado);
-                const modalId = $(this).data('modal-id');
-                $(`#${modalId}`).on('hidden.bs.modal', function () {
-                    // Esta función se ejecutará cuando el modal se haya cerrado completamente
-                    actualizarTablaCalificacionesFinales(nombreCurso);
+                                </td>
+                            </tr>
+                        `;
+                    cuerpotabla1.innerHTML += fila;
+                    numeroFila++;
                 });
-                $(`#${modalId}`).modal('hide');
-            });
-        })
+
+                $(document).on('click', '.btn-modal-calificaciones', function () {
+                    const modalId = $(this).data('modal-id');
+
+                    $(`#${modalId}`).modal('show');
+
+                    const idresultado = $(this).data('idresultado');
+                    ListarPractica(idresultado, modalId);
+                });
+
+                $(document).off('click', '.btn-calcular-calificacion').on('click', '.btn-calcular-calificacion', function () {
+                    const idresultado = $(this).data('idresultado');
+                    CalcularCalificacion(idresultado);
+                    const modalId = $(this).data('modal-id');
+                    $(`#${modalId}`).on('hidden.bs.modal', function () {
+                        // Esta función se ejecutará cuando el modal se haya cerrado completamente
+                        actualizarTablaCalificacionesFinales(nombreCurso);
+                    });
+                    $(`#${modalId}`).modal('hide');
+                });
+            })
     }
 
 
@@ -456,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data.forEach(Alumno => {
                 // Encuentra la celda específica por su id
                 const celdaCalificacion = document.getElementById(`calificacion-${Alumno.idresultado}`);
-                
+
                 // Actualiza solo el contenido de la celda
                 if (celdaCalificacion) {
                     celdaCalificacion.innerHTML = Alumno.Calificacion;
@@ -471,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const parametros = new URLSearchParams();
         parametros.append("operacion", "ListarPractica");
         parametros.append("idalumno", idalumno);
-    
+
         fetch(`../controllers/calificacion.controllers.php`, {
             method: 'POST',
             body: parametros
@@ -488,10 +585,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         .then(data => {
             console.log("Datos recibidos:", data);
-    
+
             if (data && data.length > 0) {
                 const calificaciones = data[0];
-        
+
                 $(`#${modalId} #Practica1`).val(calificaciones.practica1);
                 $(`#${modalId} #Practica2`).val(calificaciones.practica2 );
                 $(`#${modalId} #Practica3`).val(calificaciones.practica3);
@@ -505,12 +602,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 $(`#${modalId} #Practica11`).val(calificaciones.practica11);
                 $(`#${modalId} #Practica12`).val(calificaciones.practica12);
                 $(`#${modalId} #examenfinal`).val(calificaciones.examenfinal);
-        
-                
-    
+
+
+
                 $(`#${modalId}`).modal('show');
             } else {
-    
+
                 console.log("No hay calificaciones para este estudiante.");
             }
 
@@ -524,12 +621,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const practicas = Array.from($(`#${modalId} input[id^='Practica']`)).map(input => parseFloat(input.value) || 0);
         const examenFinal = parseFloat($(`#${modalId} #examenfinal`).val()) || 0;
     
-        if (practicas.some(nota => nota === 0) || examenFinal === 0) {
-            Swal.fire({
-                title: "Good job!",
-                text: "You clicked the button!",
-                icon: "success"
-              });
+        if (practicas.length === 0 || examenFinal === 0) {
+            // Mostrar mensaje indicando que no se puede calcular la calificacióniv>
+        
+            alert("¡Atención! Asegúrate de ingresar todas las notas antes de calcular la calificación.");
             return;
         }
     
@@ -542,6 +637,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: parametros
         })
     }
+    
 
 
     function actualizarEstadoAsistencia(idasistencia, estadoasistencia) {
@@ -550,13 +646,13 @@ document.addEventListener('DOMContentLoaded', function () {
         parametros.append("operacion", "actualizarEstadoAsistencia");
         parametros.append("idasistencia", idasistencia);
         parametros.append("estadoasistencia", estadoasistencia);
-    
+
         fetch(`../controllers/asistencia.controllers.php`, {
             method: 'POST',
             body: parametros
         }).then(response => {
             if (response.status === 200) {
-                
+
                 localStorage.setItem(`estadoAsistencia-${idasistencia}`, estadoasistencia);
                 actualizarEstadoEnDOM(idasistencia, estadoasistencia);
                 updateAttendanceColor();
@@ -570,12 +666,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function actualizarEstadoEnDOM(idasistencia, estadoasistencia) {
         const estadoCell = cuerpotabla.querySelector(`[data-idasistencia="${idasistencia}"]`);
         estadoCell.textContent = estadoasistencia;
-    
+
         const radioButtons = document.querySelectorAll(`[name="attendance-options-${idasistencia}"]`);
-    
+
         radioButtons.forEach(radio => {
             const labelElement = document.querySelector(`label[for="${radio.id}"]`);
-    
+
             if (radio.value === estadoasistencia) {
                 labelElement.textContent = 'X';
             } else {
@@ -583,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
+
     periodoSelector.addEventListener('change', function () {
         const periodoSeleccionado = periodoSelector.value;
         cargarCursos(periodoSeleccionado);
@@ -591,14 +687,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateAttendanceColor() {
         const attendanceElements = document.querySelectorAll('.attendance-status');
-    
+
         const statusColors = {
-            'presente': 'text-success', 
-            'ausente': 'text-danger',  
-            'tardanza': 'text-warning', 
-            'justificado': 'text-info'  
+            'presente': 'text-success',
+            'ausente': 'text-danger',
+            'tardanza': 'text-warning',
+            'justificado': 'text-info'
         };
-    
+
         attendanceElements.forEach(element => {
             const status = element.textContent.trim().toLowerCase();
 
@@ -614,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function resetAsistenciaAtMidnight() {
         // Obtén la fecha y hora actual
         const now = new Date();
-        
+
         // Calcula la cantidad de milisegundos hasta la medianoche
         const timeUntilMidnight = new Date(
             now.getFullYear(),
@@ -622,18 +718,18 @@ document.addEventListener('DOMContentLoaded', function () {
             now.getDate() + 1,
             0, 0, 0
         ) - now;
-    
+
         // Configura el intervalo para ejecutar la función cada noche a medianoche
         setInterval(() => {
             // Tu lógica de reinicio de asistencia aquí
             cuerpotabla.querySelectorAll('.btn-check').forEach(radio => {
-                radio.checked = false; 
+                radio.checked = false;
                 const idasistencia = radio.id.split('-')[1];
                 actualizarEstadoAsistencia(idasistencia, '');
             });
         },  24 * 60 * 60 * 1000);
     }
-    
+
 
     function obtenerFechaHoraActual() {
         const ahora = new Date();
@@ -646,7 +742,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (fechaHoraTh) {
             fechaHoraTh.textContent = obtenerFechaHoraActual();
         }
-    }, 1000); 
+    }, 1000);
 
 
     resetAsistenciaAtMidnight();

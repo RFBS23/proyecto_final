@@ -6,7 +6,7 @@ class Asistencia extends Conexion {
     $this->acceso = parent::getConexion();
   }
   
-  public function AlumnosPorCurso($nombreCurso){
+  public function AlumnosPorCurso($nombreCurso = ''){
     try {
         $consulta = $this->acceso->prepare("CALL spu_alumnos_del_curso(?)");
         $consulta->execute(array($nombreCurso));

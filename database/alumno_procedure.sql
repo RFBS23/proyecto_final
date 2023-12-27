@@ -21,6 +21,7 @@ BEGIN
       AND usuarios.nombreusuario = _nombreusuario;
 END $$
 
+CALL spu_modulo_alumno("daniela", "CEO2023/09");
 
 DELIMITER $$
 CREATE PROCEDURE spu_alumnos(IN nombrecurso VARCHAR(50), IN nombreusuario VARCHAR(50))
@@ -39,6 +40,8 @@ BEGIN
     ORDER BY ah.fecha DESC
     LIMIT 1;
 END $$
+
+CALL spu_alumnos('Taller de dibujo', 'daniela')
 
 
 DELIMITER $$
