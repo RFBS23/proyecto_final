@@ -620,18 +620,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalId = `modal-${idresultado}`;
         const practicas = Array.from($(`#${modalId} input[id^='Practica']`)).map(input => parseFloat(input.value) || 0);
         const examenFinal = parseFloat($(`#${modalId} #examenfinal`).val()) || 0;
+<<<<<<< HEAD
     
         if (practicas.length === 0 || examenFinal === 0) {
             // Mostrar mensaje indicando que no se puede calcular la calificacióniv>
         
             alert("¡Atención! Asegúrate de ingresar todas las notas antes de calcular la calificación.");
+=======
+
+        if (practicas.some(nota => nota === 0) || examenFinal === 0) {
+            Swal.fire({
+                title: "Good job!",
+                text: "You clicked the button!",
+                icon: "success"
+              });
+>>>>>>> a36496ad408e5d43ad797a9293b3eb2ba62d86c2
             return;
         }
-    
+
         const parametros = new URLSearchParams();
         parametros.append("operacion", "CalcularCalificacion");
         parametros.append("idresultado", idresultado);
-    
+
         fetch(`../controllers/calificacion.controllers.php`, {
             method: 'POST',
             body: parametros
